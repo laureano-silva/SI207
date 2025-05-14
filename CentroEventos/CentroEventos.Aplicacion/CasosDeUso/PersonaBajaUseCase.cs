@@ -1,6 +1,6 @@
 namespace Aplicacion;
 
-public class PersonaBajaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion auth)
+public class PersonaBajaUseCase(IRepositorioPersona repo, IServicioAutorizacion auth)
 {
     public void Ejecutar(int id, int userID)
     {

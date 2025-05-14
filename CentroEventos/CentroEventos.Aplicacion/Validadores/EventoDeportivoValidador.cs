@@ -13,7 +13,7 @@ public class EventoDeportivoValidador
     {
         message = "";
         if (string.IsNullOrEmpty(evento.Nombre))
-{
+        {
             message += "Nombre no puede estar vacio.\n";
         }
         if (string.IsNullOrEmpty(evento.Descripcion))
