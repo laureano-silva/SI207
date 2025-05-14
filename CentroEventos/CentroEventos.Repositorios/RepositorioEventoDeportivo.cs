@@ -46,8 +46,7 @@ public class RepositorioEventoDeportivo(string filename) : IRepositorioEventoDep
             }
         }
     }
-    
-
+     
     public bool ExisteEventoDeportivo(int id)
     {
         List<EventoDeportivo> eventos = ListarEventoDeportivo();
