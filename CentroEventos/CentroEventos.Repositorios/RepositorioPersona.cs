@@ -73,9 +73,9 @@ public class RepositorioPersona(string filename) : IRepositorioPersona
             p.Id = int.Parse(sr.ReadLine() ?? "0");
             p.Nombre = sr.ReadLine() ?? "";
             p.Apellido = sr.ReadLine() ?? "0";
+            p.Email = sr.ReadLine() ?? "";
             p.DNI = int.Parse(sr.ReadLine() ?? "0");
             p.Telefono = int.Parse(sr.ReadLine() ?? "0");
-            p.Email = sr.ReadLine() ?? "";
 
             lista.Add(p);
         }

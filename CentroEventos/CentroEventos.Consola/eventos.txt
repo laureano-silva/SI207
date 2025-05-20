@@ -1,0 +1,14 @@
+1
+Futbol
+prueba evento 1
+15/10/2025 10:00:00
+2
+3
+1
+2
+Basquet
+prueba evento 2
+16/10/2025 10:00:00
+1,5
+5
+2

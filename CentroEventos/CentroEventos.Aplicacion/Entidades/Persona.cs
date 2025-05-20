@@ -31,7 +31,7 @@ public class Persona
 
     public override string ToString()
     {
-        return $"Persona {Id}\n Nombre: {Nombre}\n Apellido: {Apellido}\n DNI: {DNI}\n Telefono:{Telefono}\n Email: {Email}";
+        return $" Nombre: {Nombre}\n Apellido: {Apellido}\n DNI: {DNI}\n Telefono:{Telefono}\n Email: {Email}";
     }
 
 }

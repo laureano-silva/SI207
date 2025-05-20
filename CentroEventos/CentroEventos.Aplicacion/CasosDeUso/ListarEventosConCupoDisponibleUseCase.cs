@@ -11,7 +11,7 @@ public class ListarEventosConCupoDisponibleUseCase(IRepositorioReserva repositor
         {
             if (HayCupoDisponible(evento.Id))
             {
-                listaEvento.Add(evento);
+                eventosConCupo.Add(evento);
             }
         }
         return eventosConCupo;

@@ -32,7 +32,7 @@ public class EventoDeportivoValidador
             throw new ValidacionException("La duracion debe ser mayor a 0");
         }
         if (_repositorio.ExistePersona(evento.ResponsableId) == false)
-        {
+        {   
             throw new ValidacionException("El responsable no existe");
         }
     }

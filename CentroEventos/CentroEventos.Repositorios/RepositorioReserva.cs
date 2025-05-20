@@ -116,7 +116,7 @@ public class RepositorioReserva(string filename) : IRepositorioReserva
         }
     }
 
-    public Reserva? ReservaPorId(int id)
+    public Reserva? ObtenerReserva(int id)
     {
         List<Reserva> reservas = ListarReserva();
         foreach (Reserva r in reservas)

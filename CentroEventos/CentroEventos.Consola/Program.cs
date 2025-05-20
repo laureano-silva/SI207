@@ -37,12 +37,12 @@ void EjecutarAlta<T>(Action<T, int> ejecutar, T objeto, int IdUsuario)
     try
     {
         ejecutar(objeto, IdUsuario);
+        Console.WriteLine($"Alta de {typeof(T).Name} exitosa");
     }
     catch (Exception ex)
     {
         Console.WriteLine($"Error: {ex.Message}");
     }
-    Console.WriteLine($"Alta de {typeof(T).Name} exitosa");
 }
 
 void EjecutarModificacion<T>(Action<T, int> ejecutar, T objeto, int idUsuario)
@@ -50,12 +50,12 @@ void EjecutarModificacion<T>(Action<T, int> ejecutar, T objeto, int idUsuario)
     try
     {
         ejecutar(objeto, idUsuario);
+        Console.WriteLine($"Modificación de {typeof(T).Name} exitosa");
     }
     catch (Exception ex)
     {
         Console.WriteLine($"Error: {ex.Message}");
     }
-    Console.WriteLine($"Modificación de {typeof(T).Name} exitosa");
 }
 
 void EjecutarBaja<T>(Action<int, int> ejecutar, int id, int idUsuario)
@@ -63,36 +63,41 @@ void EjecutarBaja<T>(Action<int, int> ejecutar, int id, int idUsuario)
     try
     {
         ejecutar(id, idUsuario);
+        Console.WriteLine($"Baja de {typeof(T).Name} exitosa");
     }
     catch (Exception ex)
     {
         Console.WriteLine($"Error: {ex.Message}");
     }
-    Console.WriteLine($"Baja de {typeof(T).Name} exitosa");}
+}
 
-void ListarAsistenciaAEvento(int idEvento)
+List<Persona> ListarAsistenciaAEvento(int idEvento)
 {
+    var lista = new List<Persona>();
     try
     {
-        var lista = listarAsistenciaAEvento.Ejecutar(idEvento);
-        Console.WriteLine($"Asistentes al evento {idEvento}:");
-        foreach (Persona p in lista)
-        {
-            Console.WriteLine(p.ToString());
-        }
+        lista = listarAsistenciaAEvento.Ejecutar(idEvento);
     }
     catch (Exception ex)
     {
         Console.WriteLine($"Error: {ex.Message}");
     }
+    return lista;
 }
 
-List<EventoDeportivo> EventosConCupo()
+List<EventoDeportivo> ListarEventosConCupo()
 {
-    return listarEventosConCupoDisponibleUseCase.Ejecutar(); 
+    var lista = new List<EventoDeportivo>();
+    try
+    {
+        lista = listarEventosConCupoDisponibleUseCase.Ejecutar();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+    return lista;
 }
-
-
 
 /*
  
@@ -118,19 +123,20 @@ asociadas a ella (independientemente del estado de las reservas).
 // instancio las diferentes clases
 
 
-var evento1 = new EventoDeportivo{Nombre = "Futbol", FechaHoraInicio = new DateTime(2025, 10, 15, 10, 0, 0), CupoMaximo = 3, DuracionHoras = 2};
-var evento2 = new EventoDeportivo{Nombre = "Basquet", FechaHoraInicio = new DateTime(2025, 10, 16, 10, 0, 0), CupoMaximo = 5, DuracionHoras = 1.5};
+
 
 var persona1 = new Persona{Nombre = "Juan", Apellido = "Perez", DNI = 12345678, Telefono = 123456789, Email = "juanperez@gmail.com"};
 var persona2 = new Persona{Nombre = "Maria", Apellido = "Gomez", DNI = 42359604, Telefono = 987654321, Email = "mariagomez@hotmail.com"};
 var persona3 = new Persona{Nombre = "Pedro", Apellido = "Lopez", DNI = 35854806, Telefono = 123123123, Email = "pedrolopez@outlook.com"};
 
+var evento1 = new EventoDeportivo{Nombre = "Futbol", Descripcion = "prueba evento 1",ResponsableId = 1, FechaHoraInicio = new DateTime(2025, 10, 15, 10, 0, 0), CupoMaximo = 3, DuracionHoras = 2};
+var evento2 = new EventoDeportivo{Nombre = "Basquet", Descripcion = "prueba evento 2", ResponsableId = 2, FechaHoraInicio = new DateTime(2025, 10, 16, 10, 0, 0), CupoMaximo = 5, DuracionHoras = 1.5};
 
-var reserva1 = new Reserva{PersonaId = 1, EventoDeportivoId = 1, EstadoAsistencia = EstadoAsistencia.Pendiente};
-var reserva2 = new Reserva {PersonaId = 2, EventoDeportivoId = 1, EstadoAsistencia = EstadoAsistencia.Pendiente };
-var reserva3 = new Reserva {PersonaId = 3, EventoDeportivoId = 2, EstadoAsistencia = EstadoAsistencia.Pendiente };
-var reserva4 = new Reserva {PersonaId = 1, EventoDeportivoId = 2, EstadoAsistencia = EstadoAsistencia.Pendiente };
-var reserva5 = new Reserva {PersonaId = 2, EventoDeportivoId = 2, EstadoAsistencia = EstadoAsistencia.Pendiente };
+var reserva1 = new Reserva{PersonaId = 1, EventoDeportivoId = 1, EstadoAsistencia = EstadoAsistencia.Pendiente };
+var reserva2 = new Reserva{PersonaId = 2, EventoDeportivoId = 1, EstadoAsistencia = EstadoAsistencia.Pendiente };
+var reserva3 = new Reserva{PersonaId = 3, EventoDeportivoId = 1, EstadoAsistencia = EstadoAsistencia.Pendiente };
+var reserva4 = new Reserva{PersonaId = 1, EventoDeportivoId = 1, EstadoAsistencia = EstadoAsistencia.Pendiente };
+var reserva5 = new Reserva{PersonaId = 2, EventoDeportivoId = 2, EstadoAsistencia = EstadoAsistencia.Pendiente };
 
 /////////////// PRUEBAS ///////////////
 
@@ -151,3 +157,47 @@ EjecutarAlta(altaReserva.Ejecutar, reserva4, 1);
 EjecutarAlta(altaReserva.Ejecutar, reserva5, 1);
 
 // eventos con cupo
+var eventosConCupo = ListarEventosConCupo();
+Console.WriteLine("---------------------------------------\nEventos con cupo disponible:");
+foreach (EventoDeportivo evento in eventosConCupo)
+{
+    Console.WriteLine(evento.ToString());
+}
+
+// listar asistencia a evento
+// modificamos EstadoAsistencia a Presente para 2 de las 3 reservas del evento1
+
+reserva1.EstadoAsistencia = EstadoAsistencia.Presente;
+reserva2.EstadoAsistencia = EstadoAsistencia.Presente;
+
+EjecutarModificacion(modificarReserva.Ejecutar, reserva1, 1);
+EjecutarModificacion(modificarReserva.Ejecutar, reserva2, 1);
+
+// ahora listamos los asistentes al evento1
+var asistentesAEvento = ListarAsistenciaAEvento(1);
+Console.WriteLine("---------------------------------------\nAsistentes al evento 1:");
+foreach (var persona in asistentesAEvento)
+{
+    Console.WriteLine(persona.ToString()+"\n-----------------------------");
+}
+
+// pruebas de validacion
+
+// ResponsableId debe corresponder a una Persona existente. (Requiere consulta a
+// IRepositorioPersona)
+
+Console.WriteLine("Intentando guardar un evento con ResponsableId inexistente:");
+evento1.ResponsableId = 4; // no existe
+EjecutarModificacion(modificarEventoDeportivo.Ejecutar, evento1, 1);
+
+// DNI no puede repetirse entre Personas. (Requiere consulta a IRepositorioPersona)
+var persona4 = new Persona { Nombre = "Juan", Apellido = "Gomez", DNI = 35854806, Telefono = 123456789, Email = "juangomez@aprobameprofe.com"};
+Console.WriteLine("Intentando guardar una persona con DNI repetido:");
+EjecutarAlta(altaPersona.Ejecutar, persona4, 1);
+
+// No permitir que la misma Persona reserve dos veces el mismo EventoDeportivo (Requiere
+// consulta a IRepositorioReserva)
+
+Console.WriteLine("Intentando que una persona reserve el mismo evento dos veces:");
+var reserva6 = new Reserva { PersonaId = 1, EventoDeportivoId = 1, EstadoAsistencia = EstadoAsistencia.Pendiente };
+EjecutarAlta(altaReserva.Ejecutar, reserva6, 1);

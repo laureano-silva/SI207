@@ -3,7 +3,7 @@ namespace Repositorios;
 public class RepositorioEventoDeportivo(string filename) : IRepositorioEventoDeportivo
 {
     private readonly string _fileName = filename;
-    private int ultId = 0;
+    private int ultId = 1;
     private int GenerarID() => ultId++;
     public void AgregarEventoDeportivo(EventoDeportivo e)
     {
