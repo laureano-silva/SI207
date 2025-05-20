@@ -27,7 +27,7 @@ public class RepositorioReserva(string filename) : IRepositorioReserva
         List<Reserva> reservas = ListarReserva();
         if (reservas is null)
         {
-            throw new RepositorioException("El repositorio esta vacio.");
+            throw new EntidadNotFoundException("El repositorio esta vacio.");
         }
         List<Reserva> aux = new List<Reserva>();
         foreach (Reserva r in reservas)
@@ -96,7 +96,7 @@ public class RepositorioReserva(string filename) : IRepositorioReserva
     {
         if (!ExisteReserva(reserva.Id))
         {
-            throw new RepositorioException("La reserva no se encuentra en el repositorio.");
+            throw new EntidadNotFoundException("La reserva no se encuentra en el repositorio.");
         }
         List<Reserva> reservas = ListarReserva();
         using (var sw = new StreamWriter(_fileName, false))

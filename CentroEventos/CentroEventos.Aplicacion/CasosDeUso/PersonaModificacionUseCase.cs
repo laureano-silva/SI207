@@ -6,17 +6,24 @@ public class PersonaModificacionUseCase(IRepositorioPersona repo, PersonaValidad
     {
         if (!auth.EstaAutorizado(userID, Permiso.UsuarioModificacion, out string errorAutorizacion))
         {
-            throw new AutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException(errorAutorizacion);
         }
-
-        if (!validador.Validar(persona, out string errorValidacion))
+        try
         {
-            throw new ValidacionException(errorValidacion);
+            validador.Validar(persona);
+            repo.ModificarPersona(persona);
         }
-        if (!repo.ExistePersona(persona.Id))
+        catch (ValidacionException e)
         {
-            throw new RepositorioException("La persona no se encuentra en el repositorio.");
+            throw new ValidacionException(e.Message);
         }
-        repo.ModificarPersona(persona);
+        catch (DuplicadoException e)
+        {
+            throw new DuplicadoException(e.Message);
+        }
+        catch (EntidadNotFoundException e)
+        {
+            throw new EntidadNotFoundException(e.Message);
+        }
     }
 }

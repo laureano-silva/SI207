@@ -38,41 +38,32 @@ public class PersonaValidador
     }
 
 
-    public bool Validar(Persona persona, out string message)
+    public void Validar(Persona persona)
     {
-        message = "";
         if (string.IsNullOrEmpty(persona.Nombre))
         {
-            message = "El nombre no puede estar vacio.\n";
+            throw new ValidacionException("El nombre no puede estar vacio");
         }
         if (string.IsNullOrEmpty(persona.Apellido))
         {
-            message = "El apellido no puede estar vacio.\n";
+            throw new ValidacionException("El apellido no puede estar vacio");
         }
         if (persona.DNI <= 0)
         {
-            message = "El DNI no puede estar vacio.\n";
+            throw new ValidacionException("El DNI no puede estar vacío");
         }
         if (string.IsNullOrEmpty(persona.Email))
         {
-            message = "El Email no puede estar vacio.\n";
+            throw new ValidacionException("El email no puede estar vacío");
         }
-
-        
         if (!this.EsEmailUnico(persona.Email))
         {
-            message = "El Email no puede estar repetido.\n";
+            throw new DuplicadoException("El email no puede estar repetido");   
         }
-
         if (!this.EsDNIUnico(persona.DNI))
         {
-            message = "El DNI no puede estar repetido.\n";
+            throw new DuplicadoException("El DNI no puede estar repetido");
         }
-
-
-        
-        return message == "";
-
     }
 
 }

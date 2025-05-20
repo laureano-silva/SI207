@@ -25,7 +25,7 @@ public class RepositorioEventoDeportivo(string filename) : IRepositorioEventoDep
         List<EventoDeportivo> eventos = ListarEventoDeportivo();
         if (eventos is null)
         {
-            throw new RepositorioException("El repositorio esta vacio.");
+            throw new EntidadNotFoundException("El repositorio esta vacio.");
         }
         List<EventoDeportivo> aux = new List<EventoDeportivo>();
         foreach (EventoDeportivo e in eventos)
@@ -82,7 +82,7 @@ public class RepositorioEventoDeportivo(string filename) : IRepositorioEventoDep
     {
         if (!ExisteEventoDeportivo(evento.Id))
         {
-            throw new RepositorioException("La Persona no se encuentra en el repositorio.");
+            throw new EntidadNotFoundException("El evento no se encuentra en el repositorio.");
         }
         List<EventoDeportivo> eventos = ListarEventoDeportivo();
 

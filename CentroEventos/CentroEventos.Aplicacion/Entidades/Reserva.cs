@@ -8,16 +8,15 @@ public class Reserva
     public EstadoAsistencia EstadoAsistencia { get; set; }
     
     public Reserva(){}
-    public Reserva(int id, int personaId, int eventoDeportivoId, DateTime fechaAltaReserva, EstadoAsistencia estadoAsistencia)
+    public Reserva(int personaId, int eventoDeportivoId, EstadoAsistencia estadoAsistencia)
     {
-        Id = id;
         PersonaId = personaId;
         EventoDeportivoId = eventoDeportivoId;
-        FechaAltaReserva = fechaAltaReserva;
+        FechaAltaReserva = DateTime.Now;
         EstadoAsistencia = estadoAsistencia;
     }
     public override string ToString()
     {
-        return $"Reserva: {Id}, PersonaId: {PersonaId}, EventoDeportivoId: {EventoDeportivoId}, FechaAltaReserva: {FechaAltaReserva}, EstadoAsistencia: {EstadoAsistencia}";
+        return $"PersonaId: {PersonaId}, EventoDeportivoId: {EventoDeportivoId}, FechaAltaReserva: {FechaAltaReserva}, EstadoAsistencia: {EstadoAsistencia}";
     }
 }

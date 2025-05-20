@@ -8,12 +8,16 @@ public class EventoDeportivoAltaUseCase(IRepositorioEventoDeportivo repo, Evento
     {
         if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoAlta, out string errorAutorizacion))
         {
-            throw new AutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException(errorAutorizacion);
         }
-        if (!validador.Validar(evento, out string errorValidacion))
+        try
         {
-            throw new ValidacionException(errorValidacion);
+            validador.Validar(evento);
+            repo.AgregarEventoDeportivo(evento);
         }
-        repo.AgregarEventoDeportivo(evento);
+        catch (ValidacionException e)
+        {
+            throw new ValidacionException(e.Message);
+        }
     }
 }

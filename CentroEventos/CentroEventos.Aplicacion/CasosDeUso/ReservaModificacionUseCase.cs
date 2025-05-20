@@ -6,16 +6,28 @@ public class ReservaModificacionUseCase(IRepositorioReserva repo, ReservaValidad
     {
         if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoModificacion, out string errorAutorizacion))
         {
-            throw new AutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException(errorAutorizacion);
         }
         if (!repo.ExisteReserva(reserva.Id))
         {
             throw new Exception("La reserva no se encuentra en el repositorio.");
         }
-        if (!validador.Validar(reserva, out string errorValidacion))
+        try
         {
-            throw new ValidacionException(errorValidacion);
+            validador.Validar(reserva);
+            repo.ModificarReserva(reserva);
         }
-    repo.ModificarReserva(reserva);
+        catch (EntidadNotFoundException e)
+        {
+            throw new EntidadNotFoundException(e.Message);
+        }
+        catch (FalloAutorizacionException e)
+        {
+            throw new FalloAutorizacionException(e.Message);
+        }
+        catch (ValidacionException e)
+        {
+            throw new ValidacionException(e.Message);
+        }
     }
 }

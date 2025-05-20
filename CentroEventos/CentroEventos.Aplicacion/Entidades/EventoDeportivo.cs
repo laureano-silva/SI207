@@ -13,9 +13,8 @@ public class EventoDeportivo
     public int CupoDisponible => CupoMaximo - Reservas.Count;
     public int ResponsableId { get; set; }
     public EventoDeportivo(){}
-    public EventoDeportivo(int id, string nombre, string descripcion, DateTime fecha, int cupoMaximo, int ResponsableId)
+    public EventoDeportivo(string nombre, string descripcion, DateTime fecha, int cupoMaximo, int ResponsableId)
     {
-        Id = id;
         Nombre = nombre;
         Descripcion = descripcion;
         FechaHoraInicio = fecha;

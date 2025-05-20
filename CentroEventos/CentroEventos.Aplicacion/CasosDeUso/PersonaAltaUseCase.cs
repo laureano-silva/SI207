@@ -6,14 +6,20 @@ public class PersonaAltaUseCase(IRepositorioPersona repo, PersonaValidador valid
     {
         if (!auth.EstaAutorizado(userID, Permiso.UsuarioAlta, out string errorAutorizacion))
         {
-            throw new AutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException(errorAutorizacion);
         }
-        
-        if (!validador.Validar(persona, out string errorValidacion))
+        try
         {
-            throw new ValidacionException(errorValidacion);
+            validador.Validar(persona);
+            repo.AgregarPersona(persona);
         }
-
-        repo.AgregarPersona(persona);
+        catch (DuplicadoException e)
+        {
+            throw new DuplicadoException(e.Message);
+        }
+        catch (ValidacionException e)
+        {
+            throw new ValidacionException(e.Message);
+        }
     }
 }

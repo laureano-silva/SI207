@@ -13,6 +13,6 @@ public interface IRepositorioPersona
     public void ModificarPersona(Persona persona);
     
     public bool ExistePersona(int id);
-    public Persona? PersonaPorId(int id);
+    public Persona? ObtenerPersona(int id);
     List<Persona> ListarPersona();
 }

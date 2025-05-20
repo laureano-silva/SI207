@@ -9,33 +9,31 @@ public class EventoDeportivoValidador
     {
         _repositorio = repositorio;
     }
-    public bool Validar(EventoDeportivo evento, out string message)
+    public void Validar(EventoDeportivo evento)
     {
-        message = "";
         if (string.IsNullOrEmpty(evento.Nombre))
         {
-            message += "Nombre no puede estar vacio.\n";
+            throw new ValidacionException("El nombre no puede estar vacio");
         }
         if (string.IsNullOrEmpty(evento.Descripcion))
         {
-            message += "Debe completar la descripcion.\n";
+            throw new ValidacionException("La descripcion no puede estar vacia");
         }
         if (evento.FechaHoraInicio < DateTime.Now)
         {
-            message += "La fecha no puede ser menor a la fecha actual.\n";
+            throw new ValidacionException("La fecha y hora de inicio no puede ser menor a la fecha y hora actual");
         }
         if (evento.CupoMaximo < 1)
         {
-            message += "El cupo máximo no puede ser menor a uno.\n";
+            throw new ValidacionException("El cupo maximo no puede ser menor a 1");
         }
         if (evento.DuracionHoras <= 0)
         {
-            message += "La duracion debe ser mayor a cero.\n";
+            throw new ValidacionException("La duracion debe ser mayor a 0");
         }
         if (_repositorio.ExistePersona(evento.ResponsableId) == false)
         {
-            message += "El responsable no existe.\n";
+            throw new ValidacionException("El responsable no existe");
         }
-        return message == "";
     }
 }

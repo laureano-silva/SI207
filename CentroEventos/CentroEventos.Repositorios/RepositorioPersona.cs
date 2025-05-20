@@ -25,14 +25,12 @@ public class RepositorioPersona(string filename) : IRepositorioPersona
             
         }
     }
-
-  
     public void EliminarPersona(int id)
     {
         List<Persona> personas = ListarPersona();
         if (personas is null)
         {
-            throw new RepositorioException("El repositorio esta vacio.");
+            throw new EntidadNotFoundException("El repositorio esta vacio.");
         }
         List<Persona> aux = new List<Persona>();
         foreach (Persona p in personas)
@@ -52,7 +50,6 @@ public class RepositorioPersona(string filename) : IRepositorioPersona
             }
         }
     }
-    
 
     public bool ExistePersona(int id)
     {
@@ -90,7 +87,7 @@ public class RepositorioPersona(string filename) : IRepositorioPersona
     {
         if (!ExistePersona(persona.Id))
         {
-            throw new RepositorioException("La Persona no se encuentra en el repositorio.");
+            throw new EntidadNotFoundException("La Persona no se encuentra en el repositorio.");
         }
         List<Persona> personas = ListarPersona();
 
@@ -116,7 +113,7 @@ public class RepositorioPersona(string filename) : IRepositorioPersona
         }
     }
 
-    public Persona? PersonaPorId(int id)
+    public Persona? ObtenerPersona(int id)
     {
         List<Persona> personas = ListarPersona();
         foreach (Persona p in personas)

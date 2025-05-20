@@ -25,28 +25,39 @@ public class ReservaValidador
     }
     private bool HayCupoDisponible(int idEvento)
     {
-        EventoDeportivo? evento = _repoEventoDeportivo.ObtenerEventoDeportivo(idEvento);
-        return evento != null && evento.CupoDisponible > 0;
+        _repoEventoDeportivo.ObtenerEventoDeportivo(idEvento);
+        if (_repoEventoDeportivo.ExisteEventoDeportivo(idEvento) == false)
+        {
+            return false;
+        }
+        var listaReserva = _repoReserva.ListarReserva();
+        int cantidadReservas = 0;
+        foreach (var reserva in listaReserva)
+        {
+            if (reserva.EventoDeportivoId == idEvento)
+            {
+                cantidadReservas++;
+            }
+        }
+        return cantidadReservas < _repoEventoDeportivo.ObtenerEventoDeportivo(idEvento)?.CupoMaximo;
     }
-    public bool Validar(Reserva reserva, out string message)
+    public void Validar(Reserva reserva)
     {
-        message = "";
         if (_repoPersona.ExistePersona(reserva.PersonaId) == false)
         {
-            message += "La persona no existe.\n";
+            throw new ValidacionException("La persona no existe.");
         }
         if (_repoEventoDeportivo.ExisteEventoDeportivo(reserva.EventoDeportivoId) == false)
         {
-            message += "El reserva no existe.\n";
+            throw new ValidacionException("El evento ingresado no existe.");
         }
         if (YaReservoEvento(reserva))
         {
-            message += "La persona ya tiene una reserva para el evento seleccionado.\n";
+            throw new DuplicadoException("La persona ya tiene una reserva para el evento seleccionado.");
         }
         if (!HayCupoDisponible(reserva.EventoDeportivoId))
         {
-            message += "Las reservas para el evento se encuentran agotadas.\n";
+            throw new CupoExcedidoException("No hay cupo disponible para el evento seleccionado.");
         }
-        return message == "";
     }
 }

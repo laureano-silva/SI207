@@ -1,17 +1,29 @@
 namespace Aplicacion;
 
-public class ReservaAltaUseCase(IRepositorioReserva repositorioReserva, ReservaValidador validador, IServicioAutorizacion auth)
+public class ReservaAltaUseCase(IRepositorioReserva repo, ReservaValidador validador, IServicioAutorizacion auth)
 {
     public void Ejecutar(Reserva reserva, int idUsuario)
     {
         if (!auth.EstaAutorizado(idUsuario, Permiso.ReservaAlta, out string errorAutorizacion))
         {
-            throw new AutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException(errorAutorizacion);
         }
-        if (!validador.Validar(reserva, out string errorValidacion))
+        try
         {
-            throw new ValidacionException(errorValidacion);
+            validador.Validar(reserva);
+            repo.AgregarReserva(reserva);
         }
-        repositorioReserva.AgregarReserva(reserva);
+        catch (EntidadNotFoundException e)
+        {
+            throw new EntidadNotFoundException(e.Message);
+        }
+        catch (FalloAutorizacionException e)
+        {
+            throw new FalloAutorizacionException(e.Message);
+        }
+        catch (ValidacionException e)
+        {
+            throw new ValidacionException(e.Message);
+        }
     }
 }

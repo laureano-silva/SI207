@@ -6,7 +6,7 @@ public class ReservaBajaUseCase(IRepositorioReserva repo, IServicioAutorizacion 
     {
     if (!auth.EstaAutorizado(IdUsuario, Permiso.ReservaBaja, out string errorAutorizacion))
         {
-            throw new AutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException(errorAutorizacion);
         }
         repo.EliminarReserva(reserva.Id);
     }

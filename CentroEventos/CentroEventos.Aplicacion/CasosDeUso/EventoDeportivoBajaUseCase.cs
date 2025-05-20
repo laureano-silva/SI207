@@ -1,13 +1,21 @@
 namespace Aplicacion;
 
-public class EventoDeportivoBajaUseCase(IRepositorioEventoDeportivo repo, IServicioAutorizacion auth)
+public class EventoDeportivoBajaUseCase(IRepositorioEventoDeportivo repoEvento, IRepositorioReserva repoReserva, IServicioAutorizacion auth)
 {
     public void Ejecutar(EventoDeportivo evento, int IdUsuario)
     {
-    if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoBaja, out string errorAutorizacion))
+        if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoBaja, out string errorAutorizacion))
         {
-            throw new AutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException(errorAutorizacion);
         }
-        repo.EliminarEventoDeportivo(evento.Id);
+        var reservas = repoReserva.ListarReserva();
+        foreach (var reserva in reservas)
+        {
+            if (reserva.EventoDeportivoId == evento.Id)
+            {
+                throw new OperacionInvalidaException("No se puede eliminar el evento deportivo porque tiene reservas asociadas.");
+            }
+        }
+        repoEvento.EliminarEventoDeportivo(evento.Id);
     }
 }

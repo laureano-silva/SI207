@@ -6,12 +6,24 @@ public class EventoDeportivoModificacionUseCase(IRepositorioEventoDeportivo repo
     {
         if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoModificacion, out string errorAutorizacion))
         {
-            throw new AutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException(errorAutorizacion);
         }
-        if (!validador.Validar(evento, out string errorValidacion))
+        if (evento.FechaHoraInicio < DateTime.Now)
         {
-            throw new ValidacionException(errorValidacion);
+            throw new OperacionInvalidaException("No se pueden modificar eventos pasados");
+        }   
+        try
+        {
+            validador.Validar(evento);
+            repo.ModificarEventoDeportivo(evento);
         }
-    repo.ModificarEventoDeportivo(evento);
+        catch (ValidacionException e)
+        {
+            throw new ValidacionException(e.Message);
+        }
+        catch (EntidadNotFoundException e)
+        {
+            throw new EntidadNotFoundException(e.Message);
+        }
     }
 }
