@@ -20,7 +20,7 @@ public class RepositorioPersona(string filename) : IRepositorioPersona
             sw.WriteLine(p.Nombre);
             sw.WriteLine(p.Apellido);
             sw.WriteLine(p.Email);
-            sw.WriteLine(p.DNI);
+            sw.WriteLine(p.Dni);
             sw.WriteLine(p.Telefono);
             
         }
@@ -45,7 +45,7 @@ public class RepositorioPersona(string filename) : IRepositorioPersona
                 sw.WriteLine(p.Nombre);
                 sw.WriteLine(p.Apellido);
                 sw.WriteLine(p.Email);
-                sw.WriteLine(p.DNI);
+                sw.WriteLine(p.Dni);
                 sw.WriteLine(p.Telefono);
             }
         }
@@ -74,7 +74,7 @@ public class RepositorioPersona(string filename) : IRepositorioPersona
             p.Nombre = sr.ReadLine() ?? "";
             p.Apellido = sr.ReadLine() ?? "0";
             p.Email = sr.ReadLine() ?? "";
-            p.DNI = int.Parse(sr.ReadLine() ?? "0");
+            p.Dni = sr.ReadLine() ?? "0";
             p.Telefono = int.Parse(sr.ReadLine() ?? "0");
 
             lista.Add(p);
@@ -100,14 +100,14 @@ public class RepositorioPersona(string filename) : IRepositorioPersona
                     p.Nombre = persona.Nombre;
                     p.Apellido = persona.Apellido;
                     p.Email = persona.Email;
-                    p.DNI = persona.DNI;
+                    p.Dni = persona.Dni;
                     p.Telefono = persona.Telefono;
                 }
                 sw.WriteLine(p.Id);
                 sw.WriteLine(p.Nombre);
                 sw.WriteLine(p.Apellido);
                 sw.WriteLine(p.Email);
-                sw.WriteLine(p.DNI);
+                sw.WriteLine(p.Dni);
                 sw.WriteLine(p.Telefono);
             }
         }

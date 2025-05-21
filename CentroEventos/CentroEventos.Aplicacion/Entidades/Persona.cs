@@ -11,7 +11,7 @@ public class Persona
     public int Id { get; set; }
     public  string Nombre { get; set; } = "";
     public  string Apellido { get; set; } = "";
-    public int DNI { get; set; }
+    public string Dni { get; set; } = "";
     public int Telefono { get; set; }
     public string Email { get; set; } = "";
 
@@ -20,18 +20,18 @@ public class Persona
     {
     }
 
-    public Persona ( string nombre, string apellido, int dNI, int telefono, string email)
+    public Persona ( string nombre, string apellido, string dni, int telefono, string email)
     {
         Nombre = nombre;
         Apellido = apellido;
-        DNI = dNI;
+        Dni = dni;
         Telefono = telefono;
         Email = email;
     }
 
     public override string ToString()
     {
-        return $" Nombre: {Nombre}\n Apellido: {Apellido}\n DNI: {DNI}\n Telefono:{Telefono}\n Email: {Email}";
+        return $" Nombre: {Nombre}\n Apellido: {Apellido}\n DNI: {Dni}\n Telefono:{Telefono}\n Email: {Email}";
     }
 
 }

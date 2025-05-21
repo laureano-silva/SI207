@@ -2,9 +2,9 @@ namespace Aplicacion;
 
 public class PersonaBajaUseCase(IRepositorioPersona repoPersona, IRepositorioEventoDeportivo repoEvento, IRepositorioReserva repoReserva, IServicioAutorizacion auth)
 {
-    public void Ejecutar(int id, int userID)
+    public void Ejecutar(int id, int idUsuario)
     {
-        if (!auth.EstaAutorizado(userID, Permiso.UsuarioBaja, out string errorAutorizacion))
+        if (!auth.EstaAutorizado(idUsuario, Permiso.UsuarioBaja, out string errorAutorizacion))
         {
             throw new FalloAutorizacionException(errorAutorizacion);
         }

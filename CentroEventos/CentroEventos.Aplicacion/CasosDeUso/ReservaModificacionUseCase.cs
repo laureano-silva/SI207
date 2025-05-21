@@ -1,6 +1,6 @@
 namespace Aplicacion;
 
-public class ReservaModificacionUseCase(IRepositorioReserva repo, ReservaValidador validador, IServicioAutorizacion auth)
+public class ReservaModificacionUseCase(IRepositorioReserva repo, IServicioAutorizacion auth)
 {
     public void Ejecutar(Reserva reserva, int IdUsuario)
     {
