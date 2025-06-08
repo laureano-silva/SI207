@@ -2,12 +2,12 @@
 using Repositorios;
 
 // repositorios
-var repoEvento = new RepositorioEventoDeportivo("eventos.txt");
-var repoPersona = new RepositorioPersona("personas.txt");
-var repoReserva = new RepositorioReserva("reservas.txt");
-repoEvento.Inicializar();
-repoPersona.Inicializar();
-repoReserva.Inicializar();
+var repoEvento = new RepositorioEventoDeportivo();
+var repoPersona = new RepositorioPersona();
+var repoReserva = new RepositorioReserva();
+var context = new CentroEventosContext();
+// inicializar base de datos
+CentroEventosContext.Inicializar();
 
 // servicios
 IServicioAutorizacion auth = new ServicioAutorizacionProvisorio();
@@ -153,8 +153,8 @@ void ImprimirReservas()
     }
 }
 
-var evento1 = new EventoDeportivo{Nombre = "Futbol", Descripcion = "prueba evento 1",ResponsableId = 1, FechaHoraInicio = new DateTime(2025, 10, 15, 10, 0, 0), CupoMaximo = 3, DuracionHoras = 2};
-var evento2 = new EventoDeportivo{Nombre = "Basquet", Descripcion = "prueba evento 2", ResponsableId = 2, FechaHoraInicio = new DateTime(2025, 10, 16, 10, 0, 0), CupoMaximo = 5, DuracionHoras = 1.5};
+var evento1 = new EventoDeportivo{Nombre = "Futbol", Descripcion = "prueba evento 1",PersonaId = 1, FechaHoraInicio = new DateTime(2025, 10, 15, 10, 0, 0), CupoMaximo = 3, DuracionHoras = 2};
+var evento2 = new EventoDeportivo{Nombre = "Basquet", Descripcion = "prueba evento 2", PersonaId = 2, FechaHoraInicio = new DateTime(2025, 10, 16, 10, 0, 0), CupoMaximo = 5, DuracionHoras = 1.5};
 
 var reserva1 = new Reserva{PersonaId = 1, EventoDeportivoId = 1, EstadoAsistencia = EstadoAsistencia.Pendiente };
 var reserva2 = new Reserva{PersonaId = 2, EventoDeportivoId = 1, EstadoAsistencia = EstadoAsistencia.Pendiente };
@@ -165,9 +165,9 @@ var reserva5 = new Reserva{PersonaId = 2, EventoDeportivoId = 2, EstadoAsistenci
 /////////////// PRUEBAS ///////////////
 
 // alta de personas
-var persona1 = new Persona{Nombre = "Juan", Apellido = "Perez", Dni = "12345678", Telefono = 123456789, Email = "juanperez@gmail.com"};
-var persona2 = new Persona{Nombre = "Maria", Apellido = "Gomez", Dni = "42359604", Telefono = 987654321, Email = "mariagomez@yahoo.com.ar"};
-var persona3 = new Persona{Nombre = "Pedro", Apellido = "Lopez", Dni = "35854806", Telefono = 123123123, Email = "pedrolopez@outlook.com"};
+var persona1 = new Persona{Nombre = "Juan", Apellido = "Perez", Dni = "12345678", Telefono = "123456789", Email = "juanperez@gmail.com"};
+var persona2 = new Persona{Nombre = "Maria", Apellido = "Gomez", Dni = "42359604", Telefono = "987654321", Email = "mariagomez@yahoo.com.ar"};
+var persona3 = new Persona{Nombre = "Pedro", Apellido = "Lopez", Dni = "35854806", Telefono = "123123123", Email = "pedrolopez@outlook.com"};
 
 EjecutarAlta(altaPersona.Ejecutar, persona1, 1);
 EjecutarAlta(altaPersona.Ejecutar, persona2, 1);
@@ -227,11 +227,11 @@ foreach (var persona in asistentesAEvento)
 // IRepositorioPersona)
 
 Console.WriteLine("Intentando guardar un evento con ResponsableId inexistente:");
-evento1.ResponsableId = 4; // no existe
+evento1.PersonaId = 4; // no existe
 EjecutarModificacion(modificarEventoDeportivo.Ejecutar, evento1, 1);
 
 // DNI no puede repetirse entre Personas. (Requiere consulta a IRepositorioPersona)
-var persona4 = new Persona { Nombre = "Juan", Apellido = "Gomez", Dni = "35854806", Telefono = 123456789, Email = "juangomez@aprobameprofe.com"};
+var persona4 = new Persona { Nombre = "Juan", Apellido = "Gomez", Dni = "35854806", Telefono = "123456789", Email = "juangomez@aprobameprofe.com"};
 Console.WriteLine("Intentando guardar una persona con DNI repetido:");
 EjecutarAlta(altaPersona.Ejecutar, persona4, 1);
 

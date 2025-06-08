@@ -3,7 +3,9 @@ public class Reserva
 {
     public int Id { get; set; }
     public int PersonaId { get; set; }
+    public Persona? Persona { get; set; } // propiedad de navegación para EF Core
     public int EventoDeportivoId { get; set; }
+    public EventoDeportivo? EventoDeportivo { get; set; } // propiedad de navegación para EF Core
     public DateTime FechaAltaReserva { get; set; }
     public EstadoAsistencia EstadoAsistencia { get; set; }
     

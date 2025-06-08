@@ -482,3 +482,4 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+CentroEventos/CentroEventos.Consola/CentroEventos.db

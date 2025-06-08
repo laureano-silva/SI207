@@ -1,144 +1,66 @@
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
 using Aplicacion;
-using Microsoft.Win32.SafeHandles;
+using Microsoft.EntityFrameworkCore;
 namespace Repositorios;
-public class RepositorioReserva(string filename) : IRepositorioReserva
+public class RepositorioReserva() : IRepositorioReserva
 {
-    private readonly string _fileName = filename;
-    private int ultId = 1;
-    private int GenerarId() => ultId++;
-    public void AgregarReserva(Reserva p)
+    public void AgregarReserva(Reserva r)
     {
-        p.Id = GenerarId();
-
-        using (var sw = new StreamWriter(_fileName, true))
+        using var context = new CentroEventosContext();
+        if (r is null)
         {
-            sw.WriteLine(p.Id);
-            sw.WriteLine(p.PersonaId);
-            sw.WriteLine(p.EventoDeportivoId);
-            sw.WriteLine(p.FechaAltaReserva);
-            sw.WriteLine(p.EstadoAsistencia);
+            throw new ArgumentNullException("La reserva no puede ser nula.");
         }
+        context.Reservas.Add(r);
+        context.SaveChanges();
     }
-  
     public void EliminarReserva(int id)
     {
-        List<Reserva> reservas = ListarReserva();
-        if (reservas is null)
+        using var context = new CentroEventosContext();
+        var reserva = context.Reservas.Find(id);
+        if (reserva is null)
         {
-            throw new EntidadNotFoundException("El repositorio esta vacio.");
+            throw new EntidadNotFoundException("La reserva no se encuentra en el repositorio.");
         }
-        List<Reserva> aux = new List<Reserva>();
-        foreach (Reserva r in reservas)
-        {
-            if (r.Id != id) aux.Add(r);
-        }
-        using (var sw = new StreamWriter(_fileName, false))
-        {
-            foreach (Reserva r in aux)
-            {
-            sw.WriteLine(r.Id);
-            sw.WriteLine(r.PersonaId);
-            sw.WriteLine(r.EventoDeportivoId);
-            sw.WriteLine(r.FechaAltaReserva);
-            sw.WriteLine(r.EstadoAsistencia);
-            }
-        }
+        context.Remove(reserva);
+        context.SaveChanges();
     }
 
     public bool ExisteReserva(int id)
     {
-        List<Reserva> reserva = ListarReserva();
-        foreach (Reserva r in reserva)
-        {
-            if (r.Id == id) return true;
-        }
-        return false;
+        using var context = new CentroEventosContext();
+        return context.Reservas.Any(r => r.Id == id);
     }
 
 /// Listar todas las reservas
     public List<Reserva> ListarReserva()
     {
-        var lista = new List<Reserva>();
-
-        using var sr = new StreamReader(_fileName);
-        while (!sr.EndOfStream)
-        {
-            var r = new Reserva();
-                        
-            r.Id = int.Parse(sr.ReadLine() ?? "0");
-            r.PersonaId = int.Parse(sr.ReadLine() ?? "0");
-            r.EventoDeportivoId = int.Parse(sr.ReadLine() ?? "0");
-            r.FechaAltaReserva = DateTime.Parse(sr.ReadLine() ?? "");
-            r.EstadoAsistencia = Enum.Parse<EstadoAsistencia>(sr.ReadLine() ?? "");
-            lista.Add(r);
-        }
-        return lista;
+        using var context = new CentroEventosContext();
+        return context.Reservas.ToList();
     }
 
     /// Listar reservas por persona
-        public List<Reserva> ListarReserva(int idPersona)
+    public List<Reserva> ListarReserva(int personaId)
     {
-        List<Reserva> reservas = ListarReserva();
-        List<Reserva> reservasPersona = new List<Reserva>();
-        foreach (Reserva r in reservas)
-        {
-            if (r.PersonaId == idPersona)
-            {
-                reservasPersona.Add(r);
-            }
-        }
-        return reservasPersona;
+        using var context = new CentroEventosContext();
+        var reservas = context.Reservas.ToList();
+        return reservas.Where(r => r.PersonaId == personaId).ToList();
     }
 
     public void ModificarReserva(Reserva reserva)
     {
-        if (!ExisteReserva(reserva.Id))
+        using var context = new CentroEventosContext();
+        var reservaExistente = context.Reservas.Find(reserva.Id);
+        if (reservaExistente is null)
         {
             throw new EntidadNotFoundException("La reserva no se encuentra en el repositorio.");
         }
-        List<Reserva> reservas = ListarReserva();
-        using (var sw = new StreamWriter(_fileName, false))
-        {
-            foreach (Reserva r in reservas)
-            {
-                if (r.Id == reserva.Id)
-                {
-                    r.EstadoAsistencia = reserva.EstadoAsistencia;
-                }
-                sw.WriteLine(r.Id);
-                sw.WriteLine(r.PersonaId);
-                sw.WriteLine(r.EventoDeportivoId);
-                sw.WriteLine(r.FechaAltaReserva);
-                sw.WriteLine(r.EstadoAsistencia);
-            }
-        }
+        reservaExistente.EstadoAsistencia = reserva.EstadoAsistencia;
+        context.SaveChanges();
     }
 
     public Reserva? ObtenerReserva(int id)
     {
-        List<Reserva> reservas = ListarReserva();
-        foreach (Reserva r in reservas)
-        {
-            if (r.Id == id)
-            {
-                return r;
-            }
-        }
-        return null;
+        using var context = new CentroEventosContext();
+        return context.Reservas.Find(id);
     }
-
-    public void Inicializar()
-    {
-        if (File.Exists(_fileName))
-        {
-            File.WriteAllText(_fileName, String.Empty);
-        }
-        else
-        {
-            File.Create(_fileName).Dispose();
-        }
-    }
-
 }

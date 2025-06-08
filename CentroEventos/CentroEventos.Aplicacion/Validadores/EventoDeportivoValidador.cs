@@ -37,7 +37,7 @@ public class EventoDeportivoValidador
             return (CodigoValidacion.ValidacionError, "La duracion debe ser mayor a 0");
           
         }
-        if (_repositorio.ExistePersona(evento.ResponsableId) == false)
+        if (_repositorio.ExistePersona(evento.PersonaId) == false)
         {
             return (CodigoValidacion.ValidacionError, "El responsable no existe");
             

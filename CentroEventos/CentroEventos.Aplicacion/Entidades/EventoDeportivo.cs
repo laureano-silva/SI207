@@ -1,5 +1,3 @@
-using System.Security.Principal;
-
 namespace Aplicacion;
 public class EventoDeportivo
 {
@@ -9,14 +7,16 @@ public class EventoDeportivo
     public DateTime FechaHoraInicio { get; set; }
     public double DuracionHoras { get; set; }
     public int CupoMaximo { get; set; }
-    public int ResponsableId { get; set; }
-    public EventoDeportivo(){}
-    public EventoDeportivo(string nombre, string descripcion, DateTime fecha, int cupoMaximo, int ResponsableId)
+    public int PersonaId { get; set; }
+    public Persona? Persona { get; set; } // propiedad de navegación para EF Core
+    public EventoDeportivo() { }
+    public EventoDeportivo(string nombre, string descripcion, DateTime fecha, int cupoMaximo, int personaId)
     {
         Nombre = nombre;
         Descripcion = descripcion;
         FechaHoraInicio = fecha;
         CupoMaximo = cupoMaximo;
+        PersonaId = personaId;
     }
 
     public override string ToString()

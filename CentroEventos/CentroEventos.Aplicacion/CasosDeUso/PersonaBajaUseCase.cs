@@ -11,7 +11,7 @@ public class PersonaBajaUseCase(IRepositorioPersona repoPersona, IRepositorioEve
         var eventos = repoEvento.ListarEventoDeportivo();
         foreach (var evento in eventos)
         {
-            if (evento.ResponsableId == id)
+            if (evento.PersonaId == id)
             {
                 throw new OperacionInvalidaException("No se puede eliminar la persona porque tiene eventos deportivos asociados.");
             }

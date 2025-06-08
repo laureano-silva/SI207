@@ -1,137 +1,61 @@
 using Aplicacion;
 namespace Repositorios;
-public class RepositorioEventoDeportivo(string filename) : IRepositorioEventoDeportivo
+public class RepositorioEventoDeportivo() : IRepositorioEventoDeportivo
 {
-    private readonly string _fileName = filename;
-    private int ultId = 1;
-    private int GenerarID() => ultId++;
     public void AgregarEventoDeportivo(EventoDeportivo e)
     {
-        e.Id = GenerarID();
-        using (var sw = new StreamWriter(_fileName, true))
+        if (e is null)
         {
-            sw.WriteLine(e.Id);
-            sw.WriteLine(e.Nombre);
-            sw.WriteLine(e.Descripcion);
-            sw.WriteLine(e.FechaHoraInicio);
-            sw.WriteLine(e.DuracionHoras);
-            sw.WriteLine(e.CupoMaximo);
-            sw.WriteLine(e.ResponsableId);
+            throw new ArgumentNullException("El evento deportivo no puede ser nulo.");
         }
+        using var context = new CentroEventosContext();
+        context.Eventos.Add(e);
+        context.SaveChanges();
     }
 
     public void EliminarEventoDeportivo(int id)
     {
-        List<EventoDeportivo> eventos = ListarEventoDeportivo();
-        if (eventos is null)
+        using var context = new CentroEventosContext();
+        var evento = context.Eventos.Find(id);
+        if (evento is null)
         {
-            throw new EntidadNotFoundException("El repositorio esta vacio.");
+            throw new EntidadNotFoundException("El Evento Deportivo no se encuentra en el repositorio.");
         }
-        List<EventoDeportivo> aux = new List<EventoDeportivo>();
-        foreach (EventoDeportivo e in eventos)
-        {
-            if (e.Id != id) aux.Add(e);
-        }
-        using (var sw = new StreamWriter(_fileName, false))
-        {
-            foreach (EventoDeportivo e in eventos)
-            {
-                sw.WriteLine(e.Id);
-                sw.WriteLine(e.Nombre);
-                sw.WriteLine(e.Descripcion);
-                sw.WriteLine(e.FechaHoraInicio);
-                sw.WriteLine(e.DuracionHoras);
-                sw.WriteLine(e.CupoMaximo);
-                sw.WriteLine(e.ResponsableId);
-            }
-        }
+        context.Eventos.Remove(evento);
+        context.SaveChanges();
     }
      
     public bool ExisteEventoDeportivo(int id)
     {
-        List<EventoDeportivo> eventos = ListarEventoDeportivo();
-        foreach (EventoDeportivo p in eventos)
-        {
-            if (p.Id == id) return true;
-        }
-        return false;
+        using var context = new CentroEventosContext();
+        return context.Eventos.Any(e => e.Id == id);
     }
 
     public List<EventoDeportivo> ListarEventoDeportivo()
     {
-        var eventos = new List<EventoDeportivo>();
-
-        using var sr = new StreamReader(_fileName);
-        while (!sr.EndOfStream)
-        {
-            var e = new EventoDeportivo();
-                        
-            e.Id = int.Parse(sr.ReadLine() ?? "0");
-            e.Nombre = sr.ReadLine() ?? "";
-            e.Descripcion = sr.ReadLine() ?? "";
-            e.FechaHoraInicio = DateTime.Parse(sr.ReadLine() ?? "");
-            e.DuracionHoras = double.Parse(sr.ReadLine() ?? "0");
-            e.CupoMaximo = int.Parse(sr.ReadLine() ?? "0");
-            e.ResponsableId = int.Parse(sr.ReadLine() ?? "0");
-            eventos.Add(e);
-        }
-        return eventos;
-    }   
+        using var context = new CentroEventosContext();
+        return context.Eventos.ToList();
+    }
 
     public void ModificarEventoDeportivo(EventoDeportivo evento)
     {
-        if (!ExisteEventoDeportivo(evento.Id))
+        using var context = new CentroEventosContext();
+        var eventoExistente = context.Eventos.Find(evento.Id);
+        if (eventoExistente is null)
         {
-            throw new EntidadNotFoundException("El evento no se encuentra en el repositorio.");
+            throw new EntidadNotFoundException("El Evento Deportivo no se encuentra en el repositorio.");
         }
-        List<EventoDeportivo> eventos = ListarEventoDeportivo();
-
-        using (var sw = new StreamWriter(_fileName, false))
-        {
-            foreach (EventoDeportivo e in eventos)
-            {
-                if (e.Id == evento.Id)
-                {
-                    e.Nombre = evento.Nombre;
-                    e.Descripcion = evento.Descripcion;
-                    e.FechaHoraInicio = evento.FechaHoraInicio;
-                    e.DuracionHoras = evento.DuracionHoras;
-                    e.CupoMaximo = evento.CupoMaximo;
-                    e.ResponsableId = evento.ResponsableId;
-                }
-                sw.WriteLine(e.Id);
-                sw.WriteLine(e.Nombre);
-                sw.WriteLine(e.Descripcion);
-                sw.WriteLine(e.FechaHoraInicio);
-                sw.WriteLine(e.DuracionHoras);
-                sw.WriteLine(e.CupoMaximo);
-                sw.WriteLine(e.ResponsableId);
-            }
-        }
+        eventoExistente.Nombre = evento.Nombre;
+        eventoExistente.Descripcion = evento.Descripcion;
+        eventoExistente.FechaHoraInicio = evento.FechaHoraInicio;
+        eventoExistente.DuracionHoras = evento.DuracionHoras;
+        eventoExistente.CupoMaximo = evento.CupoMaximo;
+        eventoExistente.PersonaId = evento.PersonaId;
     }
 
     public EventoDeportivo? ObtenerEventoDeportivo(int id)
     {
-        List<EventoDeportivo> eventos = ListarEventoDeportivo();
-        foreach (EventoDeportivo e in eventos)
-        {
-            if (e.Id == id) 
-            {
-                return e;
-            }
-        }
-        return null;
-    }
-
-    public void Inicializar()
-    {
-        if (File.Exists(_fileName))
-        {
-            File.WriteAllText(_fileName, String.Empty);
-        }
-        else
-        {
-            File.Create(_fileName).Dispose();
-        }
+        using var context = new CentroEventosContext();
+        return context.Eventos.Find(id);
     }
 }
