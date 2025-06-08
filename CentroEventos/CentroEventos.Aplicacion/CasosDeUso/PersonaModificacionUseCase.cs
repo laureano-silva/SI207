@@ -8,22 +8,26 @@ public class PersonaModificacionUseCase(IRepositorioPersona repo, PersonaValidad
         {
             throw new FalloAutorizacionException(errorAutorizacion);
         }
-        try
+
+
+      var resultado = validador.Validar(persona);
+        switch (resultado.Codigo)
         {
-            validador.Validar(persona);
-            repo.ModificarPersona(persona);
+            case CodigoValidacion.SinErrores:
+                break;
+
+            case CodigoValidacion.DuplicadoError:
+                throw new DuplicadoException(resultado.Mensaje);
+
+            case CodigoValidacion.ValidacionError:
+                throw new ValidacionException(resultado.Mensaje);
+
+            default:
+                throw new Exception("Código de validación no reconocido.");
         }
-        catch (ValidacionException e)
-        {
-            throw new ValidacionException(e.Message);
-        }
-        catch (DuplicadoException e)
-        {
-            throw new DuplicadoException(e.Message);
-        }
-        catch (EntidadNotFoundException e)
-        {
-            throw new EntidadNotFoundException(e.Message);
-        }
+
+        repo.ModificarPersona(persona);
+
+
     }
 }

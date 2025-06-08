@@ -9,31 +9,40 @@ public class EventoDeportivoValidador
     {
         _repositorio = repositorio;
     }
-    public void Validar(EventoDeportivo evento)
+    public (CodigoValidacion Codigo, string Mensaje) Validar(EventoDeportivo evento)
     {
         if (string.IsNullOrEmpty(evento.Nombre))
         {
-            throw new ValidacionException("El nombre no puede estar vacio");
+            return (CodigoValidacion.ValidacionError, "El nombre no puede estar vacio");
+            
         }
         if (string.IsNullOrEmpty(evento.Descripcion))
         {
-            throw new ValidacionException("La descripcion no puede estar vacia");
+            return (CodigoValidacion.ValidacionError, "La descripcion no puede estar vacia");
+           
         }
         if (evento.FechaHoraInicio < DateTime.Now)
         {
-            throw new ValidacionException("La fecha y hora de inicio no puede ser menor a la fecha y hora actual");
-        }
+            return (CodigoValidacion.ValidacionError, "La fecha y hora de inicio no puede ser menor a la fecha y hora actual");
+
+            }
         if (evento.CupoMaximo < 1)
         {
-            throw new ValidacionException("El cupo maximo no puede ser menor a 1");
+
+            return (CodigoValidacion.ValidacionError, "El cupo maximo no puede ser menor a 1");
+           
         }
         if (evento.DuracionHoras <= 0)
         {
-            throw new ValidacionException("La duracion debe ser mayor a 0");
+            return (CodigoValidacion.ValidacionError, "La duracion debe ser mayor a 0");
+          
         }
         if (_repositorio.ExistePersona(evento.ResponsableId) == false)
-        {   
-            throw new ValidacionException("El responsable no existe");
+        {
+            return (CodigoValidacion.ValidacionError, "El responsable no existe");
+            
         }
+            
+        return (CodigoValidacion.SinErrores, "");
     }
 }

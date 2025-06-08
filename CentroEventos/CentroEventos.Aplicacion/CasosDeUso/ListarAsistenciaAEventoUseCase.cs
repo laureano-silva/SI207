@@ -11,7 +11,7 @@ public class ListarAsistenciaAEventoUseCase(IRepositorioReserva repositorioReser
         {
             throw new EntidadNotFoundException("El evento no existe.");
         }
-        if (evento.FechaHoraInicio < DateTime.Now)
+        if (evento.FechaHoraInicio > DateTime.Now)
         {
             throw new EntidadNotFoundException("Solo puede consultar la asistencia de eventos pasados.");
         }

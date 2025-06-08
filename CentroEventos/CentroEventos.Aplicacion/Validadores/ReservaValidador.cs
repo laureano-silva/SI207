@@ -1,4 +1,5 @@
 using Aplicacion;
+
 public class ReservaValidador
 {
     private readonly IRepositorioReserva _repoReserva;
@@ -41,23 +42,28 @@ public class ReservaValidador
         }
         return cantidadReservas < _repoEventoDeportivo.ObtenerEventoDeportivo(idEvento)?.CupoMaximo;
     }
-    public void Validar(Reserva reserva)
+    public (CodigoValidacion Codigo, string Mensaje) Validar(Reserva reserva)
     {
         if (_repoPersona.ExistePersona(reserva.PersonaId) == false)
         {
-            throw new ValidacionException("La persona no existe.");
+             return (CodigoValidacion.ValidacionError, "La persona no existe.");
         }
         if (_repoEventoDeportivo.ExisteEventoDeportivo(reserva.EventoDeportivoId) == false)
         {
-            throw new ValidacionException("El evento ingresado no existe.");
+            return (CodigoValidacion.ValidacionError, "El evento ingresado no existe.");
+            
         }
         if (YaReservoEvento(reserva))
         {
-            throw new DuplicadoException("La persona ya tiene una reserva para el evento seleccionado.");
+            return (CodigoValidacion.DuplicadoError, "La persona ya tiene una reserva para el evento seleccionado.");
+            
         }
         if (!HayCupoDisponible(reserva.EventoDeportivoId))
         {
-            throw new CupoExcedidoException("No hay cupo disponible para el evento seleccionado.");
+            return (CodigoValidacion.CupoExedido, "No hay cupo disponible para el evento seleccionado.");
+            
         }
+
+        return (CodigoValidacion.SinErrores, "");
     }
 }

@@ -12,18 +12,14 @@ public class EventoDeportivoModificacionUseCase(IRepositorioEventoDeportivo repo
         {
             throw new OperacionInvalidaException("No se pueden modificar eventos pasados");
         }   
-        try
+       
+           var resultado = validador.Validar(evento);
+        if (resultado.Codigo == CodigoValidacion.ValidacionError)
         {
-            validador.Validar(evento);
-            repo.ModificarEventoDeportivo(evento);
+            throw new ValidacionException(resultado.Mensaje);
         }
-        catch (ValidacionException e)
-        {
-            throw new ValidacionException(e.Message);
-        }
-        catch (EntidadNotFoundException e)
-        {
-            throw new EntidadNotFoundException(e.Message);
-        }
+        repo.ModificarEventoDeportivo(evento);
+        
+      
     }
 }

@@ -10,14 +10,14 @@ public class EventoDeportivoAltaUseCase(IRepositorioEventoDeportivo repo, Evento
         {
             throw new FalloAutorizacionException(errorAutorizacion);
         }
-        try
+
+        var resultado = validador.Validar(evento);
+
+        if (resultado.Codigo == CodigoValidacion.ValidacionError)
         {
-            validador.Validar(evento);
-            repo.AgregarEventoDeportivo(evento);
+            throw new ValidacionException(resultado.Mensaje);
         }
-        catch (ValidacionException e)
-        {
-            throw new ValidacionException(e.Message);
-        }
+
+        repo.AgregarEventoDeportivo(evento);
     }
 }

@@ -8,22 +8,26 @@ public class ReservaAltaUseCase(IRepositorioReserva repo, ReservaValidador valid
         {
             throw new FalloAutorizacionException(errorAutorizacion);
         }
-        try
+
+        var resultado = validador.Validar(reserva);
+
+        switch (resultado.Codigo)
         {
-            validador.Validar(reserva);
-            repo.AgregarReserva(reserva);
+            case CodigoValidacion.SinErrores:
+                break;
+
+            case CodigoValidacion.ValidacionError:
+                throw new EntidadNotFoundException(resultado.Mensaje);
+
+            case CodigoValidacion.DuplicadoError:
+                throw new DuplicadoException(resultado.Mensaje);
+            case CodigoValidacion.CupoExedido:
+                throw new ValidacionException(resultado.Mensaje);
+
+            default:
+                throw new Exception("Código de validación no reconocido.");
         }
-        catch (EntidadNotFoundException e)
-        {
-            throw new EntidadNotFoundException(e.Message);
-        }
-        catch (FalloAutorizacionException e)
-        {
-            throw new FalloAutorizacionException(e.Message);
-        }
-        catch (ValidacionException e)
-        {
-            throw new ValidacionException(e.Message);
-        }
+
+        repo.AgregarReserva(reserva);
     }
 }

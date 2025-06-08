@@ -32,33 +32,38 @@ public class PersonaValidador
             p.Dni.Equals(persona.Dni) && p.Id != persona.Id);
     }
 
-
-    public void Validar(Persona persona)
+    public (CodigoValidacion Codigo, string Mensaje) Validar(Persona persona)
     {
-        if (string.IsNullOrEmpty(persona.Nombre))
-        {
-            throw new ValidacionException("El nombre no puede estar vacio");
-        }
+        if (string.IsNullOrWhiteSpace(persona.Nombre))
+            return (CodigoValidacion.ValidacionError, "El nombre no puede estar vacío.");
+
         if (string.IsNullOrEmpty(persona.Apellido))
         {
-            throw new ValidacionException("El apellido no puede estar vacio");
+            return (CodigoValidacion.ValidacionError, "El apellido no puede estar vacio");
+            
         }
         if (string.IsNullOrEmpty(persona.Dni))
         {
-            throw new ValidacionException("El DNI no puede estar vacío");
+            return (CodigoValidacion.ValidacionError, "El DNI no puede estar vacío");
+            
         }
         if (string.IsNullOrEmpty(persona.Email))
         {
-            throw new ValidacionException("El email no puede estar vacío");
+            return (CodigoValidacion.ValidacionError, "El email no puede estar vacío");
+            
         }
         if (!this.EsEmailUnico(persona))
         {
-            throw new DuplicadoException("El email no puede estar repetido");   
+            return (CodigoValidacion.DuplicadoError, "El email no puede estar repetido");
+             
         }
         if (!this.EsDNIUnico(persona))
         {
-            throw new DuplicadoException("El DNI no puede estar repetido");
+            return (CodigoValidacion.DuplicadoError, "El DNI no puede estar repetido");
         }
+        return (CodigoValidacion.SinErrores, "");
+
     }
 
+ 
 }
