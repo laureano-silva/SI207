@@ -7,6 +7,7 @@ public class CentroEventosContext : DbContext
     public DbSet<Persona> Personas { get; set; }
     public DbSet<EventoDeportivo> Eventos { get; set; }
     public DbSet<Reserva> Reservas { get; set; }
+    public DbSet<Usuario> Usuarios { get; set; }
     public CentroEventosContext()
     {
     }
