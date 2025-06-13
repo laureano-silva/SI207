@@ -1,4 +1,5 @@
-namespace Aplicacion;
+namespace CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Enumerativos;
 public class Reserva
 {
     public int Id { get; set; }

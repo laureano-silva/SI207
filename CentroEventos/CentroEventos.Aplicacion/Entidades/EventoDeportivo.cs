@@ -1,4 +1,4 @@
-namespace Aplicacion;
+namespace CentroEventos.Aplicacion.Entidades;
 public class EventoDeportivo
 {
     public int Id { get; set; }

@@ -1,5 +1,8 @@
-using Aplicacion;
-namespace Repositorios;
+using Microsoft.EntityFrameworkCore;
+using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Excepciones;
+namespace CentroEventos.Repositorios;
 public class RepositorioEventoDeportivo() : IRepositorioEventoDeportivo
 {
     public void AgregarEventoDeportivo(EventoDeportivo e)

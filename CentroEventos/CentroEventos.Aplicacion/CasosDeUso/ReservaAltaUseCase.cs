@@ -1,5 +1,9 @@
-namespace Aplicacion;
-
+using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Enumerativos;
+using CentroEventos.Aplicacion.Excepciones;
+using CentroEventos.Aplicacion.Validadores;
+namespace CentroEventos.Aplicacion.CasosDeUso;
 public class ReservaAltaUseCase(IRepositorioReserva repo, ReservaValidador validador, IServicioAutorizacion auth)
 {
     public void Ejecutar(Reserva reserva, int idUsuario)
@@ -25,7 +29,7 @@ public class ReservaAltaUseCase(IRepositorioReserva repo, ReservaValidador valid
                 throw new ValidacionException(resultado.Mensaje);
 
             default:
-                throw new Exception("Código de validación no reconocido.");
+                throw new Exception("Cï¿½digo de validaciï¿½n no reconocido.");
         }
 
         repo.AgregarReserva(reserva);

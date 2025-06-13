@@ -1,7 +1,7 @@
-using Aplicacion;
-using Microsoft.EntityFrameworkCore;
-namespace Repositorios;
 
+using Microsoft.EntityFrameworkCore;
+using CentroEventos.Aplicacion.Entidades;
+namespace CentroEventos.Repositorios;
 public class CentroEventosContext : DbContext
 {
     public DbSet<Persona> Personas { get; set; }

@@ -1,5 +1,9 @@
-namespace Aplicacion;
-
+using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Enumerativos;
+using CentroEventos.Aplicacion.Excepciones;
+using CentroEventos.Aplicacion.Validadores;
+namespace CentroEventos.Aplicacion.CasosDeUso;
 public class ListarAsistenciaAEventoUseCase(IRepositorioReserva repositorioReserva, IRepositorioEventoDeportivo repositorioEventoDeportivo, IRepositorioPersona repositorioPersona)
 {
     public List<Persona> Ejecutar(int idEvento)

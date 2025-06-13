@@ -1,5 +1,7 @@
-using Aplicacion;
-
+using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Enumerativos;
+namespace CentroEventos.Aplicacion.Validadores;
 public class ReservaValidador
 {
     private readonly IRepositorioReserva _repoReserva;

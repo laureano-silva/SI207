@@ -1,6 +1,8 @@
-using Aplicacion;
 using Microsoft.EntityFrameworkCore;
-namespace Repositorios;
+using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Excepciones;
+namespace CentroEventos.Repositorios;
 public class RepositorioReserva() : IRepositorioReserva
 {
     public void AgregarReserva(Reserva r)

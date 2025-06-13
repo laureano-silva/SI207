@@ -1,5 +1,8 @@
-using Aplicacion;
-namespace Repositorios;
+using Microsoft.EntityFrameworkCore;
+using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Excepciones;
+namespace CentroEventos.Repositorios;
 public class RepositorioPersona() : IRepositorioPersona
 {
     public void AgregarPersona(Persona p)

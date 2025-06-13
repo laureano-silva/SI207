@@ -1,4 +1,5 @@
-namespace Aplicacion;
+namespace CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Entidades;
 public interface IRepositorioReserva
 {
     public void AgregarReserva(Reserva reserva);

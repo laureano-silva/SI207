@@ -1,5 +1,9 @@
-namespace Aplicacion;
-public interface IRepositorioEventoDeportivo{
+namespace CentroEventos.Aplicacion.Interfaces;
+
+using CentroEventos.Aplicacion.Entidades;
+
+public interface IRepositorioEventoDeportivo
+{
     void AgregarEventoDeportivo(EventoDeportivo e);
     EventoDeportivo? ObtenerEventoDeportivo(int id);
     void ModificarEventoDeportivo(EventoDeportivo e);
