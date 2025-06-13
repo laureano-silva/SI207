@@ -7,12 +7,9 @@ namespace CentroEventos.Aplicacion.CasosDeUso;
 
 public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador validador, IServicioAutorizacion auth)
 {
-    public void Ejecutar(Usuario usuario, int userId)
+    public void Ejecutar(Usuario usuario)
     {
-        if (!auth.EstaAutorizado(userId, Permiso.UsuarioAlta, out string errorAutorizacion))
-        {
-            throw new FalloAutorizacionException(errorAutorizacion);
-        }
+       
 
         var resultado = validador.Validar(usuario);
 
@@ -30,6 +27,6 @@ public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador valid
             default:
                 throw new Exception("Codigo de validacion no reconocido.");
         }
-        repo.AgregarUsuario(usuario);
+      repo.AgregarUsuario(usuario);
     }
 }

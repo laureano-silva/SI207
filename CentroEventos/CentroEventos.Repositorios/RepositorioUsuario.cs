@@ -6,6 +6,7 @@ namespace CentroEventos.Repositorios;
 
 public class RepositorioUsuario() : IRepositorioUsuario
 {
+    
     public void AgregarUsuario(Usuario p)
     {
         if (p is null)

@@ -8,7 +8,7 @@ namespace CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Entidades;
 public interface IRepositorioUsuario
 {
-    public void AgregarUsuario(Usuario usuario);
+    public void  AgregarUsuario(Usuario usuario);
 
     public void EliminarUsuario(int id);
 

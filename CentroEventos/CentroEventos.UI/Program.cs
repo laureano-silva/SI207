@@ -6,7 +6,10 @@ using CentroEventos.Repositorios;
 using CentroEventos.UI.Components;
 
 
-CentroEventosContext.Inicializar();
+using (var context = new CentroEventosContext())
+{
+    context.Database.EnsureCreated();
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,27 +17,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Casos de uso
-builder.Services.AddTransient<PersonaAltaUseCase>();
-builder.Services.AddTransient<PersonaBajaUseCase>();
-builder.Services.AddTransient<PersonaModificacionUseCase>();
-builder.Services.AddTransient<PersonaListarUseCase>();
-
-builder.Services.AddTransient<ReservaAltaUseCase>();
-builder.Services.AddTransient<ReservaAltaUseCase>();
-builder.Services.AddTransient<ReservaBajaUseCase>();
-builder.Services.AddTransient<ReservaBajaUseCase>();
-
-builder.Services.AddTransient<UsuarioModificacionUseCase>();
-builder.Services.AddTransient<UsuarioModificacionUseCase>();
-builder.Services.AddTransient<UsuarioModificacionUseCase>();
-builder.Services.AddTransient<UsuarioModificacionUseCase>();
-
-builder.Services.AddTransient<EventoDeportivoListarUseCase>();
-builder.Services.AddTransient<EventoDeportivoListarUseCase>();
-builder.Services.AddTransient<EventoDeportivoListarUseCase>();
-builder.Services.AddTransient<EventoDeportivoListarUseCase>();
-
+builder.Services.AddScoped<UsuarioAltaUseCase>();
+builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>(); // Si usas interfaces
+builder.Services.AddDbContext<CentroEventosContext>();
 builder.Services.AddTransient<ListarAsistenciaAEventoUseCase>();
 builder.Services.AddTransient<ListarEventosConCupoDisponibleUseCase>();
 
@@ -58,19 +43,19 @@ builder.Services.AddTransient<PersonaModificacionUseCase>();
 builder.Services.AddTransient<PersonaListarUseCase>();
 
 builder.Services.AddTransient<ReservaAltaUseCase>();
-builder.Services.AddTransient<ReservaAltaUseCase>();
+builder.Services.AddTransient<ReservaListarUseCase>();
 builder.Services.AddTransient<ReservaBajaUseCase>();
-builder.Services.AddTransient<ReservaBajaUseCase>();
+builder.Services.AddTransient<ReservaModificacionUseCase>();
 
-builder.Services.AddTransient<UsuarioModificacionUseCase>();
-builder.Services.AddTransient<UsuarioModificacionUseCase>();
-builder.Services.AddTransient<UsuarioModificacionUseCase>();
+builder.Services.AddTransient<UsuarioAltaUseCase>();
+builder.Services.AddTransient<UsuarioBajaUseCase>();
+builder.Services.AddTransient<UsuarioListarUseCase>();
 builder.Services.AddTransient<UsuarioModificacionUseCase>();
 
 builder.Services.AddTransient<EventoDeportivoListarUseCase>();
-builder.Services.AddTransient<EventoDeportivoListarUseCase>();
-builder.Services.AddTransient<EventoDeportivoListarUseCase>();
-builder.Services.AddTransient<EventoDeportivoListarUseCase>();
+builder.Services.AddTransient<EventoDeportivoAltaUseCase>();
+builder.Services.AddTransient<EventoDeportivoBajaUseCase>();
+builder.Services.AddTransient<EventoDeportivoModificacionUseCase>();
 
 builder.Services.AddTransient<ListarAsistenciaAEventoUseCase>();
 builder.Services.AddTransient<ListarEventosConCupoDisponibleUseCase>();

@@ -1,0 +1,33 @@
+@page "/crearusuario"
+@rendermode InteractiveServer
+@inject NavigationManager Navegador
+@using CentroEventos.Aplicacion.Entidades
+@inject UsuarioAltaUseCase UsuarioAltaUseCase
+
+<PageTitle>Crear Usuario</PageTitle>
+
+<h3>Crear Usuario</h3>
+
+<input placeholder="Nombre" @bind="_usuario.Nombre" class="form-control">
+<input placeholder="Apellido" @bind="_usuario.Apellido" class="form-control">
+<input placeholder="Email" @bind="_usuario.Email" class="form-control">
+<input placeholder="Contraseña" @bind="Contraseña" class="form-control">
+<button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+
+
+
+@code {
+
+Usuario _usuario = new Usuario();
+
+string? Contraseña;
+
+void Aceptar()
+{
+
+_usuario.EstablecerContraseña(Contraseña);    
+UsuarioAltaUseCase.Ejecutar(_usuario);
+_usuario = new Usuario();
+Navegador.NavigateTo("/");
+}
+}

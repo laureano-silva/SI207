@@ -9,7 +9,7 @@ public class Usuario
     public string? Nombre { get; set; }
     public string? Apellido { get; set; }
     public string? Email { get; set; }
-    public string? Password { get; private set; }
+    public string? Password { get;private set; }
     public List<Permiso> Permisos { get; set; } = new List<Permiso>();
     public Usuario() { }
 
