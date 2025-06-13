@@ -51,7 +51,46 @@ builder.Services.AddScoped<IRepositorioEventoDeportivo, RepositorioEventoDeporti
 builder.Services.AddScoped<IRepositorioReserva, RepositorioReserva>();
 builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
 
+// Casos de uso
+builder.Services.AddTransient<PersonaAltaUseCase>();
+builder.Services.AddTransient<PersonaBajaUseCase>();
+builder.Services.AddTransient<PersonaModificacionUseCase>();
+builder.Services.AddTransient<PersonaListarUseCase>();
+
+builder.Services.AddTransient<ReservaAltaUseCase>();
+builder.Services.AddTransient<ReservaAltaUseCase>();
+builder.Services.AddTransient<ReservaBajaUseCase>();
+builder.Services.AddTransient<ReservaBajaUseCase>();
+
+builder.Services.AddTransient<UsuarioModificacionUseCase>();
+builder.Services.AddTransient<UsuarioModificacionUseCase>();
+builder.Services.AddTransient<UsuarioModificacionUseCase>();
+builder.Services.AddTransient<UsuarioModificacionUseCase>();
+
+builder.Services.AddTransient<EventoDeportivoListarUseCase>();
+builder.Services.AddTransient<EventoDeportivoListarUseCase>();
+builder.Services.AddTransient<EventoDeportivoListarUseCase>();
+builder.Services.AddTransient<EventoDeportivoListarUseCase>();
+
+builder.Services.AddTransient<ListarAsistenciaAEventoUseCase>();
+builder.Services.AddTransient<ListarEventosConCupoDisponibleUseCase>();
+
+// Servicios
+builder.Services.AddTransient<IServicioAutorizacion, ServicioAutorizacionProvisorio>();
+builder.Services.AddTransient<PersonaValidador>();
+builder.Services.AddTransient<EventoDeportivoValidador>();
+builder.Services.AddTransient<ReservaValidador>();
+builder.Services.AddTransient<UsuarioValidador>();
+
+// Repositorios
+builder.Services.AddScoped<IRepositorioPersona, RepositorioPersona>();
+builder.Services.AddScoped<IRepositorioEventoDeportivo, RepositorioEventoDeportivo>();
+builder.Services.AddScoped<IRepositorioReserva, RepositorioReserva>();
+builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
+
 var app = builder.Build();
+
+// Configuracion del contenedor de dependencias
 
 // Configuracion del contenedor de dependencias
 
