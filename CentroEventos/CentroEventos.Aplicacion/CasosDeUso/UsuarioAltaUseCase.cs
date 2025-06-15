@@ -27,6 +27,7 @@ public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador valid
             default:
                 throw new Exception("Codigo de validacion no reconocido.");
         }
+        
       repo.AgregarUsuario(usuario);
     }
 }

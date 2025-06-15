@@ -18,7 +18,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddScoped<UsuarioAltaUseCase>();
-builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>(); // Si usas interfaces
+builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>(); 
 builder.Services.AddDbContext<CentroEventosContext>();
 builder.Services.AddTransient<ListarAsistenciaAEventoUseCase>();
 builder.Services.AddTransient<ListarEventosConCupoDisponibleUseCase>();
@@ -75,9 +75,7 @@ builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
 
 var app = builder.Build();
 
-// Configuracion del contenedor de dependencias
 
-// Configuracion del contenedor de dependencias
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -2,21 +2,46 @@ using Microsoft.EntityFrameworkCore;
 using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Excepciones;
+using CentroEventos.Aplicacion.Enumerativos;
 namespace CentroEventos.Repositorios;
 
 public class RepositorioUsuario() : IRepositorioUsuario
 {
-    
-    public void AgregarUsuario(Usuario p)
+
+ public void AgregarUsuario(Usuario p)
+{
+    if (p is null)
     {
-        if (p is null)
+        throw new ArgumentNullException("El usuario no puede ser nulo.");
+    }
+    
+    using var context = new CentroEventosContext();
+    
+
+    context.Usuarios.Add(p);
+    context.SaveChanges();
+    
+    if (p.Id == 1)
+    {
+        var listaDePermisos = new List<Permiso>()
         {
-            throw new ArgumentNullException("El usuario no puede ser nulo.");
-        }
-        using var context = new CentroEventosContext();
-        context.Usuarios.Add(p);
+            Permiso.EventoAlta,
+            Permiso.EventoModificacion,
+            Permiso.EventoBaja,
+            Permiso.ReservaAlta,
+            Permiso.ReservaModificacion,
+            Permiso.ReservaBaja,
+            Permiso.UsuarioAlta,
+            Permiso.UsuarioModificacion,
+            Permiso.UsuarioBaja
+        };
+       
+        p.Permisos = listaDePermisos;
+       
         context.SaveChanges();
     }
+}
+    
     public void EliminarUsuario(int id)
     {
         using var context = new CentroEventosContext();
