@@ -9,8 +9,6 @@ public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador valid
 {
     public void Ejecutar(Usuario usuario)
     {
-       
-
         var resultado = validador.Validar(usuario);
 
         switch (resultado.Codigo)
@@ -27,7 +25,6 @@ public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador valid
             default:
                 throw new Exception("Codigo de validacion no reconocido.");
         }
-        
       repo.AgregarUsuario(usuario);
     }
 }

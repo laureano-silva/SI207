@@ -16,5 +16,6 @@ public interface IRepositorioUsuario
     
     public bool ExisteUsuario(int id);
     public Usuario? ObtenerUsuario(int id);
+    public Usuario? ObtenerUsuario(string email);
     List<Usuario> ListarUsuario();
 }

@@ -85,4 +85,9 @@ public class RepositorioUsuario() : IRepositorioUsuario
         using var context = new CentroEventosContext();
         return context.Usuarios.Find(id);
     }
+    public Usuario? ObtenerUsuario(string email)
+    {
+        using var context = new CentroEventosContext();
+        return context.Usuarios.FirstOrDefault(u => u.Email == email);
+    }
 }

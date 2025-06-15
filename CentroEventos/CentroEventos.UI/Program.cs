@@ -51,6 +51,7 @@ builder.Services.AddTransient<UsuarioAltaUseCase>();
 builder.Services.AddTransient<UsuarioBajaUseCase>();
 builder.Services.AddTransient<UsuarioListarUseCase>();
 builder.Services.AddTransient<UsuarioModificacionUseCase>();
+builder.Services.AddTransient<UsuarioLoginUseCase>();
 
 builder.Services.AddTransient<EventoDeportivoListarUseCase>();
 builder.Services.AddTransient<EventoDeportivoAltaUseCase>();
@@ -66,6 +67,7 @@ builder.Services.AddTransient<PersonaValidador>();
 builder.Services.AddTransient<EventoDeportivoValidador>();
 builder.Services.AddTransient<ReservaValidador>();
 builder.Services.AddTransient<UsuarioValidador>();
+builder.Services.AddScoped<Sesion>();
 
 // Repositorios
 builder.Services.AddScoped<IRepositorioPersona, RepositorioPersona>();
