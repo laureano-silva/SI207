@@ -2,16 +2,28 @@ using CentroEventos.Aplicacion.Entidades;
 
 namespace CentroEventos.Aplicacion.Servicios;
 
-public class Sesion()
+public class Sesion
 {
     public Usuario? UsuarioActual { get; private set; }
-    public bool EstaLogueado => UsuarioActual is not null;
+    
+    public event Action? OnSesionCambiada;
+
+    public bool EstaLogueado()
+    {
+        return UsuarioActual != null;
+    }
+
     public void Iniciar(Usuario usuario)
     {
         UsuarioActual = usuario;
+        
+        OnSesionCambiada?.Invoke();
     }
-    public void Cerrar()
+
+    public void CerrarSesion()
     {
         UsuarioActual = null;
+
+        OnSesionCambiada?.Invoke();
     }
 }

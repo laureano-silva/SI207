@@ -68,6 +68,7 @@ builder.Services.AddTransient<EventoDeportivoValidador>();
 builder.Services.AddTransient<ReservaValidador>();
 builder.Services.AddTransient<UsuarioValidador>();
 builder.Services.AddScoped<Sesion>();
+builder.Services.AddSingleton<Sesion>();
 
 // Repositorios
 builder.Services.AddScoped<IRepositorioPersona, RepositorioPersona>();

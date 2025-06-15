@@ -1,6 +1,17 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject Sesion Sesion
+@rendermode InteractiveServer
+@implements IDisposable
+@inject NavigationManager NavigationManager
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">CentroEventos.UI</a>
+        @if (Sesion.EstaLogueado())
+        {
+            <span class="navbar-text text-light">
+                Bienvenido, @Sesion.UsuarioActual?.Nombre
+            </span>
+        }
     </div>
 </div>
 
@@ -8,11 +19,90 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Login
-            </NavLink>
-        </div>
+        @if (!Sesion.EstaLogueado())
+        {
+            <!-- Menú cuando NO hay sesión iniciada -->
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Login
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="crearusuario">
+                    <span class="bi bi-person-plus-fill" aria-hidden="true"></span> Crear Usuario
+                </NavLink>
+            </div>
+        }
+        else
+        {
+            <!-- Menú cuando SÍ hay sesión iniciada -->
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Inicio
+                </NavLink>
+            </div>
+            
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="listado-personas">
+                    <span class="bi bi-people-fill" aria-hidden="true"></span> Listado de Personas
+                </NavLink>
+            </div>
+            
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="listado-reserva">
+                    <span class="bi bi-person-fill" aria-hidden="true"></span> Listado de Reserva
+                </NavLink>
+            </div>
+            
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="listado-eventos">
+                    <span class="bi bi-calendar-event-fill" aria-hidden="true"></span> Eventos Deportivos
+                </NavLink>
+            </div>
+            
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="control-acceso">
+                    <span class="bi bi-shield-check-fill" aria-hidden="true"></span> Control de Acceso
+                </NavLink>
+            </div>
+            
+            <!-- Separador -->
+            <hr class="text-white mx-3" />
+            
+            <div class="nav-item px-3">
+                <button class="nav-link btn btn-link text-start w-100" @onclick="CerrarSesion">
+                    <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Cerrar Sesión
+                </button>
+            </div>
+        }
     </nav>
 </div>
 
+@code {
+    protected override void OnInitialized()
+    {
+        if (Sesion != null)
+        {
+            Sesion.OnSesionCambiada += ActualizarMenu;
+        }
+    }
+    
+    private void ActualizarMenu()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void CerrarSesion()
+    {
+        Sesion.CerrarSesion();
+        NavigationManager.NavigateTo("/");
+    }
+
+    public void Dispose()
+    {
+        if (Sesion != null)
+        {
+            Sesion.OnSesionCambiada -= ActualizarMenu;
+        }
+    }
+}
