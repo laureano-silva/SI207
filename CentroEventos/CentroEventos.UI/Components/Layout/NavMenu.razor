@@ -3,91 +3,223 @@
 @implements IDisposable
 @inject NavigationManager NavigationManager
 
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        @if (Sesion.EstaLogueado())
-        {
-            <span class="navbar-text text-light">
-                Bienvenido, @Sesion.UsuarioActual?.Nombre
-            </span>
-        }
-    </div>
-</div>
+<style>
+    .nav-menu {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+    
+    .nav-header {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .welcome-text {
+        color: #fff;
+        font-weight: 500;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    
+    .nav-item-custom {
+        margin: 0.25rem 0.75rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-item-custom:hover {
+        background: rgba(255,255,255,0.1);
+        transform: translateX(5px);
+    }
+    
+    .nav-link-custom {
+        color: #fff !important;
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 400;
+    }
+    
+    .nav-link-custom:hover {
+        color: #fff !important;
+        background: rgba(255,255,255,0.15);
+    }
+    
+    .nav-link-custom.active {
+        background: rgba(255,255,255,0.2);
+        color: #fff !important;
+        font-weight: 500;
+    }
+    
+    .nav-icon {
+        margin-right: 0.75rem;
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+    }
+    
+    .nav-divider {
+        border-color: rgba(255,255,255,0.3) !important;
+        margin: 1rem 0.75rem;
+    }
+    
+    .logout-btn {
+        background: none;
+        border: none;
+        color: #fff !important;
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 400;
+        width: 100%;
+        text-align: left;
+    }
+    
+    .logout-btn:hover {
+        background: rgba(220, 53, 69, 0.2);
+        color: #fff !important;
+    }
+    
+    .navbar-toggler-custom {
+        border: none;
+        background: none;
+        color: #fff;
+        font-size: 1.25rem;
+        padding: 0.5rem;
+    }
+</style>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        @if (!Sesion.EstaLogueado())
-        {
-            <!-- Menú cuando NO hay sesión iniciada -->
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Login
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="crearusuario">
-                    <span class="bi bi-person-plus-fill" aria-hidden="true"></span> Crear Usuario
-                </NavLink>
-            </div>
-        }
-        else
-        {
-            <!-- Menú cuando SÍ hay sesión iniciada -->
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
-                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Inicio
-                </NavLink>
-            </div>
-            
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="listado-personas">
-                    <span class="bi bi-people-fill" aria-hidden="true"></span> Listado de Personas
-                </NavLink>
-            </div>
-
-              <div class="nav-item px-3">
-                <NavLink class="nav-link" href="crear-personas">
-                    <span class="bi bi-people-fill" aria-hidden="true"></span> Crear Personas
-                </NavLink>
+<div class="nav-menu">
+    <div class="nav-header">
+        <div class="container-fluid">
+            @if (Sesion.EstaLogueado())
+            {
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-circle me-2" style="font-size: 1.5rem; color: #fff;"></i>
+                    <span class="welcome-text">
+                        Bienvenido, @Sesion.UsuarioActual?.Nombre
+                    </span>
                 </div>
-            
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="listado-reserva">
-                    <span class="bi bi-person-fill" aria-hidden="true"></span> Listado de Reserva
-                </NavLink>
-            </div>
+            }
+            else
+            {
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-shield-lock me-2" style="font-size: 1.5rem; color: #fff;"></i>
+                    <span class="welcome-text">Sistema de Gestión</span>
+                </div>
+            }
+        </div>
+    </div>
 
-               <div class="nav-item px-3">
-                <NavLink class="nav-link" href="crear-reserva">
-                    <span class="bi bi-person-fill" aria-hidden="true"></span> Crear Reserva
-                </NavLink>
-            </div>
-            
-            
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="listado-eventos">
-                    <span class="bi bi-calendar-event-fill" aria-hidden="true"></span> Eventos Deportivos
-                </NavLink>
-            </div>
-            
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="control-acceso">
-                    <span class="bi bi-shield-check-fill" aria-hidden="true"></span> Control de Acceso
-                </NavLink>
-            </div>
-            
-            <!-- Separador -->
-            <hr class="text-white mx-3" />
-            
-            <div class="nav-item px-3">
-                <button class="nav-link btn btn-link text-start w-100" @onclick="CerrarSesion">
-                    <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Cerrar Sesión
-                </button>
-            </div>
-        }
-    </nav>
+    <input type="checkbox" title="Navigation menu" class="navbar-toggler" style="display: none;" />
+
+    <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+        <nav class="flex-column">
+            @if (!Sesion.EstaLogueado())
+            {
+                <div class="nav-item-custom">
+                    <NavLink class="nav-link-custom" href="" Match="NavLinkMatch.All">
+                        <i class="bi bi-box-arrow-in-right nav-icon"></i>
+                        <span>Iniciar Sesión</span>
+                    </NavLink>
+                </div>
+                <div class="nav-item-custom">
+                    <NavLink class="nav-link-custom" href="crearusuario">
+                        <i class="bi bi-person-plus-fill nav-icon"></i>
+                        <span>Crear Usuario</span>
+                    </NavLink>
+                </div>
+            }
+            else
+            {
+                <div class="nav-item-custom">
+                    <NavLink class="nav-link-custom" href="home" Match="NavLinkMatch.All">
+                        <i class="bi bi-house-door-fill nav-icon"></i>
+                        <span>Inicio</span>
+                    </NavLink>
+                </div>
+
+                <div class="nav-item-custom">
+                    <NavLink class="nav-link-custom" href="listado-personas">
+                        <i class="bi bi-people-fill nav-icon"></i>
+                        <span>Listado de Personas</span>
+                    </NavLink>
+                </div>
+
+                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta) == true)
+                {
+                    <div class="nav-item-custom">
+                        <NavLink class="nav-link-custom" href="crear-personas">
+                            <i class="bi bi-person-plus nav-icon"></i>
+                            <span>Crear Personas</span>
+                        </NavLink>
+                    </div>
+                }
+
+                <div class="nav-item-custom">
+                    <NavLink class="nav-link-custom" href="listado-reserva">
+                        <i class="bi bi-calendar-check-fill nav-icon"></i>
+                        <span>Listado de Reservas</span>
+                    </NavLink>
+                </div>
+
+                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaAlta) == true)
+                {
+                    <div class="nav-item-custom">
+                        <NavLink class="nav-link-custom" href="crear-reserva">
+                            <i class="bi bi-plus-circle-fill nav-icon"></i>
+                            <span>Crear Reserva</span>
+                        </NavLink>
+                    </div>
+                }
+
+                <div class="nav-item-custom">
+                    <NavLink class="nav-link-custom" href="listado-eventos">
+                        <i class="bi bi-trophy-fill nav-icon"></i>
+                        <span>Eventos Deportivos</span>
+                    </NavLink>
+                </div>
+
+                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta & Permiso.UsuarioBaja & Permiso.UsuarioModificacion & Permiso.PersonaAlta & Permiso.PersonaBaja & Permiso.PersonaModificacion) == true)
+                {
+                    <div class="nav-item-custom">
+                        <NavLink class="nav-link-custom" href="control-acceso">
+                            <i class="bi bi-shield-check-fill nav-icon"></i>
+                            <span>Control de Acceso</span>
+                        </NavLink>
+                    </div>
+                }
+
+                <hr class="nav-divider" />
+
+                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta) == true)
+                {
+                    <div class="nav-item-custom">
+                        <NavLink class="nav-link-custom" href="crearusuario">
+                            <i class="bi bi-person-plus-fill nav-icon"></i>
+                            <span>Crear Usuario</span>
+                        </NavLink>
+                    </div>
+                }
+
+                <div class="nav-item-custom">
+                    <button class="logout-btn" @onclick="CerrarSesion">
+                        <i class="bi bi-box-arrow-right nav-icon"></i>
+                        <span>Cerrar Sesión</span>
+                    </button>
+                </div>
+            }
+        </nav>
+    </div>
 </div>
 
 @code {
@@ -98,7 +230,7 @@
             Sesion.OnSesionCambiada += ActualizarMenu;
         }
     }
-    
+
     private void ActualizarMenu()
     {
         InvokeAsync(StateHasChanged);

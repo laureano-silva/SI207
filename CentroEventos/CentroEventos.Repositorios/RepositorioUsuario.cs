@@ -33,7 +33,10 @@ public class RepositorioUsuario() : IRepositorioUsuario
             Permiso.ReservaBaja,
             Permiso.UsuarioAlta,
             Permiso.UsuarioModificacion,
-            Permiso.UsuarioBaja
+            Permiso.UsuarioBaja,
+            Permiso.PersonaAlta,
+            Permiso.PersonaBaja,
+            Permiso.PersonaModificacion
         };
        
         p.Permisos = listaDePermisos;

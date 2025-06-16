@@ -1,17 +1,13 @@
 @page "/listado-personas"
-
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
-
 @inject Sesion Sesion
-
 @inject PersonaListarUseCase personaListarUseCase
 
 @using CentroEventos.Aplicacion.Entidades
 
-
-<PageTitle>Listado de Persona </PageTitle>
+<PageTitle>Listado de Persona</PageTitle>
 
 <div class="container mt-4">
     <table class="table table-striped">
@@ -22,11 +18,16 @@
                 <th>Apellido</th>
                 <th>Email</th>
                 <th>Dni</th>
-                <th>Telefono</th>
-                <th>Acción</th>
+                <th>Teléfono</th>
+                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaModificacion) == true ||
+                     Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaBaja) == true)
+                {
+                    <th>Acción</th>
+                }
             </tr>
         </thead>
         <tbody>
+            @if (_lista != null && _lista.Any()){
             @foreach (var per in _lista)
             {
                 <tr>
@@ -36,23 +37,43 @@
                     <td>@per.Email</td>
                     <td>@per.Dni</td>
                     <td>@per.Telefono</td>
-                    <td>
-                <button class="btn btn-primary">Editar</button>
-                <button class="btn btn-danger">Eliminar</button>
-                </td>
+                    @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaModificacion) == true ||
+                         Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaBaja) == true)
+                    {
+                        <td>
+                            @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaModificacion) == true)
+                            {
+                                <a class="btn btn-sm btn-primary" href="">Editar</a>
+                            }
+
+                            @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaBaja) == true)
+                            {
+                                <button class="btn btn-sm btn-danger">Eliminar</button>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+            }else
+            {
+                <tr>
+                    <td colspan="7" class="text-center">No hay reservas registradas.</td>
                 </tr>
             }
         </tbody>
     </table>
 
+    @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaAlta) == true)
+    {
+        <a class="btn btn-sm btn-primary" href="/crear-personas">Agregar Persona</a>
+    }
 </div>
 
 @code {
-    List <Persona> _lista = new();
+    List<Persona> _lista = new();
 
     protected override void OnInitialized()
     {
         _lista = personaListarUseCase.Ejecutar();
     }
 }
-
