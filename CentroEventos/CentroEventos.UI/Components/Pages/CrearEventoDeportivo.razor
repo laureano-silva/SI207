@@ -1,0 +1,116 @@
+@page "/crear-eventos"
+@rendermode InteractiveServer
+
+@inject NavigationManager Navegador
+@using CentroEventos.Aplicacion.Entidades
+@inject EventoDeportivoAltaUseCase EventoDeportivoAltaUseCase
+
+<PageTitle>Crear Evento Deportivo</PageTitle>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Crear Usuario</h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(_error))
+                    {
+                        <div class="alert alert-danger">@_error</div>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(_exito))
+                    {
+                        <div class="alert alert-success">@_exito</div>
+                    }
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" @bind="_evento.Nombre" placeholder="Ingresa tu nombre">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descripcion</label>
+                        <input type="text" class="form-control" @bind="_evento.Descripcion" placeholder="Ingresa la descripcion">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fecha</label>
+                        <input type="text" class="form-control" @bind="_evento.FechaHoraInicio" placeholder="Ingresa la fecha">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Cupo</label>
+                        <input type="text" class="form-control" @bind="_evento.CupoMaximo" placeholder="Ingresa el cupo maximo">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Responsable</label>
+                        <input type="text" class="form-control" @bind="_evento.PersonaId" placeholder="Selecciona el responsable">
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" @onclick="Aceptar" disabled="@_cargando">
+                            @if (_cargando)
+                            {
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                            }
+                            Crear Evento
+                        </button>
+                        <button class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    EventoDeportivo _evento = new EventoDeportivo();
+
+    private string _error = string.Empty;
+    private string _exito = string.Empty;
+    private bool _cargando = false;
+
+    private async Task Aceptar()
+    {
+        _error = string.Empty;
+        _exito = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(_evento.Nombre) || 
+            string.IsNullOrWhiteSpace(_evento.Descripcion) ||
+            string.IsNullOrWhiteSpace((_evento.FechaHoraInicio).ToString()) ||
+            string.IsNullOrWhiteSpace(_evento.PersonaId.ToString()))
+        {
+            _error = "Todos los campos son obligatorios";
+            return;
+        }
+
+        _cargando = true;
+        
+        try
+        {
+             EventoDeportivoAltaUseCase.Ejecutar(_evento,1);
+
+            _exito = "¡Evento creado exitosamente!";
+            _evento = new EventoDeportivo();
+
+            await Task.Delay(1500); 
+            Navegador.NavigateTo("/listado-eventos");
+        }
+        catch (Exception ex)
+        {
+            _error = "Error al crear evento: " + ex.InnerException?.Message ?? ex.Message;
+        }
+        finally
+        {
+            _cargando = false;
+        }
+    }
+
+    private void Cancelar()
+    {
+        Navegador.NavigateTo("/listado-eventos");
+    }
+}

@@ -1,0 +1,76 @@
+@page "/listado-eventos"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.Web
+@inject NavigationManager NavigationManager
+@inject Sesion Sesion
+@inject EventoDeportivoListarUseCase EventoDeportivoListarUseCase
+
+@using CentroEventos.Aplicacion.Entidades
+
+<div class="container mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Fecha</th>
+                <th>Mail del responsable</th>
+                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoModificacion) == true ||
+                     Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoBaja) == true)
+                {
+                    <th>Acción</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (_lista != null && _lista.Any()){
+            @foreach (var evento in _lista)
+            {
+                <tr>
+                    <td>@evento.Id</td>
+                    <td>@evento.Nombre</td>
+                    <td>@evento.Descripcion</td>
+                    <td>@evento.FechaHoraInicio</td>
+                    <td>@evento.Persona?.Email</td>
+                    @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoModificacion) == true ||
+                         Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoBaja) == true)
+                    {
+                        <td>
+                            @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoModificacion) == true)
+                            {
+                                <a class="btn btn-sm btn-primary" href="">Editar</a>
+                            }
+
+                            @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoBaja) == true)
+                            {
+                                <button class="btn btn-sm btn-danger">Eliminar</button>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+            }else
+            {
+                <tr>
+                    <td colspan="7" class="text-center">No hay reservas registradas.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoAlta) == true)
+    {
+        <a class="btn btn-sm btn-primary" href="/crear-eventos">Agregar Eventos</a>
+    }
+</div>
+
+@code {
+    List<EventoDeportivo> _lista = new();
+
+    protected override void OnInitialized()
+    {
+        _lista = EventoDeportivoListarUseCase.Ejecutar();
+    }
+}
