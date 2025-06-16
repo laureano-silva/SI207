@@ -11,8 +11,7 @@
 
 @using CentroEventos.Aplicacion.Entidades
 
-<PageTitle>Listado de Persona</PageTitle>
-
+<h1>Listado de Persona</h1>
 <div class="container mt-4">
         @if (!string.IsNullOrEmpty(mensajeError))
 {
@@ -53,6 +52,7 @@
                              Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaBaja) == true)
                         {
                             <td>
+                                <div class="d-flex gap-2">
                                 @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaModificacion) == true)
                                 {
                                     <a class="btn btn-sm btn-primary" @onclick="() => AbrirModalEditar(per)">Editar</a>
@@ -62,6 +62,7 @@
                                 {
                                    <button class="btn btn-sm btn-danger" @onclick="() => MostrarModalEliminar(per)">Eliminar</button>
                                 }
+                                </div>
                             </td>
                         }
                     </tr>

@@ -4,14 +4,12 @@
 @inject Sesion Sesion
 @inject ReservaListarUseCase reservaListarUseCase
 @inject ReservaBajaUseCase reservaBajaUseCase
-
 @inject ReservaModificacionUseCase reservaModificacionUseCase
 
 @using CentroEventos.Aplicacion.Servicios
 @using CentroEventos.Aplicacion.Entidades
 
-<PageTitle>Listado de Reserva</PageTitle>
-
+<h1>Listado de Reserva</h1>
 <div class="container mt-4">
     <table class="table table-striped">
         <thead>
@@ -47,19 +45,21 @@
                         <td>@rev.EventoDeportivo?.CupoMaximo</td>
                         <td>@rev.EventoDeportivo?.DuracionHoras</td>
                         <td>@rev.EstadoAsistencia</td>
-                        @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaModificacion) == true ||
-                             Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaBaja) == true)
+                      @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaModificacion) == true ||
+                            Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaBaja) == true)
                         {
-                            <td>
-                               @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaModificacion) == true)
-{
-    <button class="btn btn-sm btn-primary" @onclick="() => AbrirModalEditar(rev)">Editar</button>
-}
-@if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaBaja) == true)
-{
-   <button class="btn btn-sm btn-danger" @onclick="() => MostrarModalEliminar(rev)">Eliminar</button>
-}
-                            </td>
+                        <td>
+                        <div class="d-flex gap-2">
+                    @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaModificacion) == true)
+                        {
+                        <button class="btn btn-sm btn-primary" @onclick="() => AbrirModalEditar(rev)">Editar</button>
+                        }
+                    @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaBaja) == true)
+                        {
+                        <button class="btn btn-sm btn-danger" @onclick="() => MostrarModalEliminar(rev)">Eliminar</button>
+                        }
+                        </div>
+                        </td>
                         }
                     </tr>
                 }
@@ -67,68 +67,68 @@
             else
             {
                 <tr>
-                    <td colspan="7" class="text-center">No hay reservas registradas.</td>
+                    <td colspan="9" class="text-center">No hay reservas registradas.</td>
                 </tr>
             }
         </tbody>
     </table>
+
     @if (reservaAEliminar != null)
-{
-    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirmar eliminación</h5>
-                    <button type="button" class="btn-close" @onclick="CancelarEliminacion"></button>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        ¿Estás seguro de que querés eliminar la reserva de 
-                        <strong>@reservaAEliminar.Persona?.Nombre</strong> en el evento 
-                        <strong>@reservaAEliminar.EventoDeportivo?.Nombre</strong>?
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" @onclick="CancelarEliminacion">Cancelar</button>
-                    <button class="btn btn-danger" @onclick="EliminarConfirmado">Eliminar</button>
+    {
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmar eliminación</h5>
+                        <button type="button" class="btn-close" @onclick="CancelarEliminacion"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            ¿Estás seguro de que querés eliminar la reserva de
+                            <strong>@reservaAEliminar.Persona?.Nombre</strong> en el evento
+                            <strong>@reservaAEliminar.EventoDeportivo?.Nombre</strong>?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" @onclick="CancelarEliminacion">Cancelar</button>
+                        <button class="btn btn-danger" @onclick="EliminarConfirmado">Eliminar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-}
-
+    }
 
     @if (reservaSeleccionada != null)
-{
-    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Editar Reserva</h5>
-                    <button type="button" class="btn-close" @onclick="CerrarModal"></button>
-                </div>
-                <div class="modal-body">
-                  <div class="mb-2">
-                        <label>Estado Asistencia</label>
-                    <select class="form-control" @bind="reservaSeleccionada.EstadoAsistencia">
-                        <option value="Pendiente">Pendiente</option>
-                        <option value="Presente">Presente</option>
-                        <option value="Ausente">Ausente</option>
-                    </select>
-                </div>
-                    @if (!string.IsNullOrEmpty(mensajeErrorModal))
-                    {
-                        <div class="alert alert-danger">@mensajeErrorModal</div>
-                    }
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
-                    <button class="btn btn-primary" @onclick="GuardarCambios">Guardar</button>
+    {
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Reserva</h5>
+                        <button type="button" class="btn-close" @onclick="CerrarModal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-2">
+                            <label>Estado Asistencia</label>
+                            <select class="form-control" @bind="reservaSeleccionada.EstadoAsistencia">
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Presente">Presente</option>
+                                <option value="Ausente">Ausente</option>
+                            </select>
+                        </div>
+                        @if (!string.IsNullOrEmpty(mensajeErrorModal))
+                        {
+                            <div class="alert alert-danger">@mensajeErrorModal</div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                        <button class="btn btn-primary" @onclick="GuardarCambios">Guardar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-}
+    }
 
     @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaAlta) == true)
     {
@@ -172,7 +172,7 @@
         try
         {
             var idUsuario = Sesion.UsuarioActual?.Id ?? 0;
-            reservaModificacionUseCase.Ejecutar(reservaSeleccionada!,idUsuario);
+            reservaModificacionUseCase.Ejecutar(reservaSeleccionada!, idUsuario);
             _lista = reservaListarUseCase.Ejecutar() ?? new List<Reserva>();
             reservaSeleccionada = null;
         }
@@ -182,24 +182,25 @@
         }
     }
 
- private void MostrarModalEliminar(Reserva reserva)
-{
-    reservaAEliminar = reserva;
-}
-
-private void CancelarEliminacion()
-{
-    reservaAEliminar = null;
-}
-
-private void EliminarConfirmado()
-{
-    if (reservaAEliminar != null)
+    private void MostrarModalEliminar(Reserva reserva)
     {
-        EliminarReserva(reservaAEliminar.Id);
+        reservaAEliminar = reserva;
+    }
+
+    private void CancelarEliminacion()
+    {
         reservaAEliminar = null;
     }
-}
+
+    private void EliminarConfirmado()
+    {
+        if (reservaAEliminar != null)
+        {
+            EliminarReserva(reservaAEliminar.Id);
+            reservaAEliminar = null;
+        }
+    }
+
     private void EliminarReserva(int id)
     {
         try
@@ -213,6 +214,4 @@ private void EliminarConfirmado()
             mensajeError = "Error al eliminar la reserva.";
         }
     }
-
-   
 }
