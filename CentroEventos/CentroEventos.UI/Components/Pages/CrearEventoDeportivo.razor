@@ -8,7 +8,7 @@
 @inject EventoDeportivoAltaUseCase EventoDeportivoAltaUseCase
 @inject PersonaListarUseCase PersonaListarUseCase
 
-@if(!Sesion.EstaLogueado()) {
+@if(!Sesion.EstaLogueado() || Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoAlta) != true) {
     Navegador.NavigateTo("/");
 
 }

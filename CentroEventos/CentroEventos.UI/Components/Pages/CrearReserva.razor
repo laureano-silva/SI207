@@ -5,7 +5,7 @@
 @using CentroEventos.Aplicacion.Entidades
 @inject ReservaAltaUseCase reservaAltaUseCase
 
-@if(!Sesion.EstaLogueado()) {
+@if(!Sesion.EstaLogueado() || Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaAlta) != true) {
     Navegador.NavigateTo("/");
 
 }
