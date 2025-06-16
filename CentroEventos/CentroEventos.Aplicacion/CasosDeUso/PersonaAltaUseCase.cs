@@ -9,7 +9,7 @@ public class PersonaAltaUseCase(IRepositorioPersona repo, PersonaValidador valid
 {
     public void Ejecutar(Persona persona, int userID)
     {
-        if (!auth.EstaAutorizado(userID, Permiso.UsuarioAlta, out string errorAutorizacion))
+          if (!auth.EstaAutorizado(userID, Permiso.UsuarioAlta, out string errorAutorizacion))
         {
             throw new FalloAutorizacionException(errorAutorizacion);
         }

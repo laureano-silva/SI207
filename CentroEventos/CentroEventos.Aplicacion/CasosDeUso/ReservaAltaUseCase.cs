@@ -32,6 +32,8 @@ public class ReservaAltaUseCase(IRepositorioReserva repo, ReservaValidador valid
                 throw new Exception("C�digo de validaci�n no reconocido.");
         }
 
+        reserva.FechaAltaReserva = DateTime.Now;
+
         repo.AgregarReserva(reserva);
     }
 }

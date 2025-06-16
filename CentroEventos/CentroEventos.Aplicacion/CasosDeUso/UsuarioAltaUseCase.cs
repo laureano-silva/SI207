@@ -5,7 +5,7 @@ using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
-public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador validador, IServicioAutorizacion auth)
+public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador validador)
 {
     public void Ejecutar(Usuario usuario)
     {

@@ -1,0 +1,56 @@
+@page "/listado-reserva"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject Sesion Sesion
+@inject ReservaListarUseCase reservaListarUseCase
+@inject ReservaBajaUseCase reservaBajaUseCase
+
+@using CentroEventos.Aplicacion.Entidades
+
+<PageTitle> Listado de Reserva</PageTitle>
+
+<div class="container mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Reserva Evento Deportivo</th>
+                <th>Fecha alta</th>
+                <th>Estado asistencia</th>
+                <th>Persona Id</th>
+                <th>Persona</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rev in _lista)
+            {
+                <tr>
+                    <td>@rev.Id</td>
+                    <td>@rev.EventoDeportivo.Nombre</td>
+                    <td>@rev.FechaAltaReserva</td>
+                    <td>@rev.EstadoAsistencia</td>
+                    <td>@rev.PersonaId</td>
+                    <td>@rev.Persona.Nombre</td>
+                    <td>
+                <button class="btn btn-primary">Editar</button>
+                <button class="btn btn-danger">Eliminar</button>
+                </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@code {
+    private List<Reserva> _lista = new();
+
+    protected override void OnInitialized()
+    {
+        _lista = reservaListarUseCase.Ejecutar();
+    }
+
+
+}
+

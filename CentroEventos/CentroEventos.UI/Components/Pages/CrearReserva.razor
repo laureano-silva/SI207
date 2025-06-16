@@ -1,0 +1,119 @@
+@page "/crear-reserva"
+@rendermode InteractiveServer
+
+@inject NavigationManager Navegador
+@using CentroEventos.Aplicacion.Entidades
+@inject ReservaAltaUseCase reservaAltaUseCase
+
+<PageTitle>Crear Reserva</PageTitle>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Crear Reserva</h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(_error))
+                    {
+                        <div class="alert alert-danger">@_error</div>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(_exito))
+                    {
+                        <div class="alert alert-success">@_exito</div>
+                    }
+
+              <div class="mb-3"> 
+                        <label class="form-label">Persona Id</label>
+                        <input type="number" class="form-control" @bind="_reserva.PersonaId" placeholder="Ingresa la persona Id">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Evento Deportivo Id</label>
+                        <input type="number" class="form-control" @bind="_reserva.EventoDeportivoId" placeholder="Ingresa el evento deportivo Id">
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" @onclick="Aceptar" disabled="@_cargando">
+                            @if (_cargando)
+                            {
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                            }
+                            Crear Reserva
+                        </button>
+                        <button class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    Reserva _reserva = new Reserva();
+
+    private string _error = string.Empty;
+    private string _exito = string.Empty;
+    private bool _cargando = false;
+
+    private async Task Aceptar()
+    {
+        _error = string.Empty;
+        _exito = string.Empty;
+        _cargando = true;
+        
+
+        try
+        {
+
+        if (_reserva.PersonaId <= 0)
+        {
+            _error = "Debe ingresar un ID de persona válido";
+            return;
+        }
+
+        if (_reserva.EventoDeportivoId <= 0)
+        {
+            _error = "Debe ingresar un ID de evento deportivo válido";
+            return;
+        }
+
+
+
+            var nuevaReserva = new Reserva(_reserva.PersonaId, _reserva.EventoDeportivoId, EstadoAsistencia.Pendiente);
+            reservaAltaUseCase.Ejecutar(_reserva,1);
+
+            _exito = "Reserva creada exitosamente!";
+            _reserva = new Reserva();
+
+            await Task.Delay(1500); 
+            Navegador.NavigateTo("/home");
+        }
+        catch (Exception ex)
+        {
+              var errorCompleto = ex.ToString(); // Obtener stack trace completo
+        var errorMensaje = ex.InnerException?.Message ?? ex.Message;
+        
+        Console.WriteLine($"Error completo: {errorCompleto}");
+        
+        // Mostrar error más detallado
+        _error = $"Error al crear reserva: {errorMensaje}";
+        
+        // Si el mensaje está vacío, mostrar el tipo de excepción
+        if (string.IsNullOrEmpty(errorMensaje))
+        {
+            _error = $"Error al crear reserva: {ex.GetType().Name}";
+        }
+        }
+        finally
+        {
+            _cargando = false;
+        }
+    }
+
+    private void Cancelar()
+    {
+        Navegador.NavigateTo("/home");
+    }
+}

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web"> 
 
   <ItemGroup>
     <ProjectReference Include="..\CentroEventos.Aplicacion\CentroEventos.Aplicacion.csproj" />
@@ -10,5 +10,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+
 
 </Project>

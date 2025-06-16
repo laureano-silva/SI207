@@ -1,0 +1,58 @@
+@page "/listado-personas"
+
+@rendermode InteractiveServer
+
+@inject NavigationManager NavigationManager
+
+@inject Sesion Sesion
+
+@inject PersonaListarUseCase personaListarUseCase
+
+@using CentroEventos.Aplicacion.Entidades
+
+
+<PageTitle>Listado de Persona </PageTitle>
+
+<div class="container mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Dni</th>
+                <th>Telefono</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var per in _lista)
+            {
+                <tr>
+                    <td>@per.Id</td>
+                    <td>@per.Nombre</td>
+                    <td>@per.Apellido</td>
+                    <td>@per.Email</td>
+                    <td>@per.Dni</td>
+                    <td>@per.Telefono</td>
+                    <td>
+                <button class="btn btn-primary">Editar</button>
+                <button class="btn btn-danger">Eliminar</button>
+                </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@code {
+    List <Persona> _lista = new();
+
+    protected override void OnInitialized()
+    {
+        _lista = personaListarUseCase.Ejecutar();
+    }
+}
+

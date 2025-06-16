@@ -6,6 +6,7 @@ using CentroEventos.Repositorios;
 using CentroEventos.UI.Components;
 
 
+
 using (var context = new CentroEventosContext())
 {
     context.Database.EnsureCreated();

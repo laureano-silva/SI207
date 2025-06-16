@@ -37,7 +37,10 @@ public class RepositorioReserva() : IRepositorioReserva
     public List<Reserva> ListarReserva()
     {
         using var context = new CentroEventosContext();
-        return context.Reservas.ToList();
+        return  context.Reservas
+    .Include(r => r.EventoDeportivo)  
+    .Include(r => r.Persona)          
+    .ToList();
     }
 
     /// Listar reservas por persona
