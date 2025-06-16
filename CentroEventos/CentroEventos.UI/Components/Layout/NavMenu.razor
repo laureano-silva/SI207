@@ -190,10 +190,17 @@
                     </NavLink>
                 </div>
 
+                 <div class="nav-item-custom">
+                    <NavLink class="nav-link-custom" href="listado-eventos-cupoDisponible">
+                        <i class="bi bi-calendar-check-fill nav-icon"></i>
+                        <span>Eventos con Cupo Disponible</span>
+                    </NavLink>
+                </div>
+
                 @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoAlta) == true)
                 {
                     <div class="nav-item-custom">
-                        <NavLink class="nav-link-custom" href="crear-evento">
+                        <NavLink class="nav-link-custom" href="crear-eventos">
                             <i class="bi bi-plus-circle-fill nav-icon"></i>
                             <span>Crear Evento</span>
                         </NavLink>
