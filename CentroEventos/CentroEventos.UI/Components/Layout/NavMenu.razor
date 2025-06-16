@@ -96,30 +96,31 @@
         font-size: 1.25rem;
         padding: 0.5rem;
     }
+    
+
 </style>
 
 <div class="nav-menu">
     <div class="nav-header">
-        <div class="container-fluid">
-            @if (Sesion.EstaLogueado())
-            {
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-person-circle me-2" style="font-size: 1.5rem; color: #fff;"></i>
-                    <span class="welcome-text">
-                        Bienvenido, @Sesion.UsuarioActual?.Nombre
-                    </span>
-                </div>
-            }
-            else
-            {
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-shield-lock me-2" style="font-size: 1.5rem; color: #fff;"></i>
-                    <span class="welcome-text">Sistema de Gestión</span>
-                </div>
-            }
-        </div>
+    <div class="container-fluid">
+        @if (Sesion.EstaLogueado())
+        {
+            <div class="d-flex align-items-baseline">
+                <i class="bi bi-person-circle me-2" style="font-size: 1.5rem; color: #fff;"></i>
+                <span class="welcome-text">
+                    Bienvenido, @Sesion.UsuarioActual?.Nombre
+                </span>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex align-items-baseline">
+                <i class="bi bi-shield-lock me-2" style="font-size: 1.5rem; color: #fff;"></i>
+                <span class="welcome-text">Sistema de Gestión</span>
+            </div>
+        }
     </div>
-
+</div>
     <input type="checkbox" title="Navigation menu" class="navbar-toggler" style="display: none;" />
 
     <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
@@ -193,7 +194,7 @@
                 {
                     <div class="nav-item-custom">
                         <NavLink class="nav-link-custom" href="control-acceso">
-                            <i class="bi bi-shield-check-fill nav-icon"></i>
+                            <i class="bi bi-house-fill"></i>
                             <span>Control de Acceso</span>
                         </NavLink>
                     </div>

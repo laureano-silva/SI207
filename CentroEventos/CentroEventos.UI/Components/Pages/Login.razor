@@ -5,14 +5,7 @@
 @inject Sesion Sesion
 
 
-<link href="css/site.css" rel="stylesheet" />
-
-
-
-
 <PageTitle>Iniciar Sesión</PageTitle>
-
-
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -80,7 +73,7 @@
                 _exito = "¡Sesión iniciada correctamente!";
                 Sesion.Iniciar(resultado.Usuario!);
                 
-                // Mostrar mensaje de éxito por un momento antes de redirigir
+  
                 StateHasChanged();
                 await Task.Delay(1000);
                 

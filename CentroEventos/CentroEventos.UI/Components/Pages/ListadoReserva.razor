@@ -5,6 +5,8 @@
 @inject ReservaListarUseCase reservaListarUseCase
 @inject ReservaBajaUseCase reservaBajaUseCase
 
+@inject ReservaModificacionUseCase reservaModificacionUseCase
+
 @using CentroEventos.Aplicacion.Servicios
 @using CentroEventos.Aplicacion.Entidades
 
@@ -43,14 +45,14 @@
                              Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaBaja) == true)
                         {
                             <td>
-                                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaModificacion) == true)
-                                {
-                                    <a class="btn btn-sm btn-primary" href="">Editar</a>
-                                }
-                                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaBaja) == true)
-                                {
-                                    <button class="btn btn-sm btn-danger">Eliminar</button>
-                                }
+                               @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaModificacion) == true)
+{
+    <button class="btn btn-sm btn-primary" @onclick="() => AbrirModalEditar(rev)">Editar</button>
+}
+@if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaBaja) == true)
+{
+    <button class="btn btn-sm btn-danger" @onclick="() => ConfirmarEliminar(rev.Id)">Eliminar</button>
+}
                             </td>
                         }
                     </tr>
@@ -64,6 +66,37 @@
             }
         </tbody>
     </table>
+    @if (reservaSeleccionada != null)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Reserva</h5>
+                    <button type="button" class="btn-close" @onclick="CerrarModal"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-2">
+                        <label>Estado Asistencia</label>
+                    <select class="form-control" @bind="reservaSeleccionada.EstadoAsistencia">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Presente">Presente</option>
+                        <option value="Ausente">Ausente</option>
+                    </select>
+                </div>
+                    @if (!string.IsNullOrEmpty(mensajeErrorModal))
+                    {
+                        <div class="alert alert-danger">@mensajeErrorModal</div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                    <button class="btn btn-primary" @onclick="GuardarCambios">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
     @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaAlta) == true)
     {
@@ -73,9 +106,70 @@
 
 @code {
     private List<Reserva> _lista = new();
+    private Reserva? reservaSeleccionada;
+    private string? mensajeError;
+    private string? mensajeErrorModal;
 
     protected override void OnInitialized()
     {
         _lista = reservaListarUseCase.Ejecutar() ?? new List<Reserva>();
     }
+
+    private void AbrirModalEditar(Reserva reserva)
+    {
+        reservaSeleccionada = new Reserva
+        {
+            Id = reserva.Id,
+            EstadoAsistencia = reserva.EstadoAsistencia,
+            FechaAltaReserva = reserva.FechaAltaReserva,
+            PersonaId = reserva.PersonaId,
+            EventoDeportivoId = reserva.EventoDeportivoId,
+        };
+        mensajeErrorModal = null;
+    }
+
+    private void CerrarModal()
+    {
+        reservaSeleccionada = null;
+        mensajeErrorModal = null;
+    }
+
+    private void GuardarCambios()
+    {
+        try
+        {
+            var idUsuario = Sesion.UsuarioActual?.Id ?? 0;
+            reservaModificacionUseCase.Ejecutar(reservaSeleccionada!,idUsuario);
+            _lista = reservaListarUseCase.Ejecutar() ?? new List<Reserva>();
+            reservaSeleccionada = null;
+        }
+        catch (Exception)
+        {
+            mensajeErrorModal = "Error al guardar los cambios.";
+        }
+    }
+
+    private async Task ConfirmarEliminar(int id)
+    {
+        if (await JS.InvokeAsync<bool>("confirm", "¿Estás seguro que querés eliminar esta reserva?"))
+        {
+            EliminarReserva(id);
+        }
+    }
+
+    private void EliminarReserva(int id)
+    {
+        try
+        {
+            var idUsuario = Sesion.UsuarioActual?.Id ?? 0;
+            reservaBajaUseCase.Ejecutar(id, idUsuario);
+            _lista = reservaListarUseCase.Ejecutar();
+        }
+        catch (Exception)
+        {
+            mensajeError = "Error al eliminar la reserva.";
+        }
+    }
+
+    [Inject] IJSRuntime JS { get; set; } = default!;
 }
