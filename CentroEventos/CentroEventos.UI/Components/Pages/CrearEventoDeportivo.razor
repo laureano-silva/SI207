@@ -1,9 +1,9 @@
 @page "/crear-eventos"
 @rendermode InteractiveServer
-
 @inject NavigationManager Navegador
 @using CentroEventos.Aplicacion.Entidades
 @inject EventoDeportivoAltaUseCase EventoDeportivoAltaUseCase
+@inject PersonaListarUseCase PersonaListarUseCase
 
 <PageTitle>Crear Evento Deportivo</PageTitle>
 
@@ -36,8 +36,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Fecha</label>
-                        <input type="text" class="form-control" @bind="_evento.FechaHoraInicio" placeholder="Ingresa la fecha">
+                        <label class="form-label">Fecha y hora del evento</label>
+                        <InputDate class="form-control"
+                            @bind-Value="_evento.FechaHoraInicio" />
                     </div>
 
                     <div class="mb-3">
@@ -46,8 +47,13 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Responsable</label>
-                        <input type="text" class="form-control" @bind="_evento.PersonaId" placeholder="Selecciona el responsable">
+                        <label>Responsable</label>
+                            <InputSelect class="form-control" @bind-Value="_evento.PersonaId" placeholder="Seleccione una persona">
+                                @foreach (var persona in _personas)
+                                {
+                                    <option value="@persona.Id">@persona.Email</option>
+                                }
+                            </InputSelect>
                     </div>
 
                     <div class="d-grid gap-2">
@@ -67,8 +73,13 @@
 </div>
 
 @code {
+    List<Persona> _personas = new List<Persona>();
+    protected override void OnInitialized()
+    {
+        // Cargar la lista de personas al inicializar el componente
+        _personas = PersonaListarUseCase.Ejecutar();
+    }
     EventoDeportivo _evento = new EventoDeportivo();
-
     private string _error = string.Empty;
     private string _exito = string.Empty;
     private bool _cargando = false;
