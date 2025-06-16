@@ -6,10 +6,17 @@
 @inject PersonaListarUseCase personaListarUseCase
 @inject PersonaBajaUseCase personaBajaUseCase
 
-
+@inject NavigationManager NavigationManager
 @inject PersonaModificacionUseCase personaModificacionUseCase
 
 @using CentroEventos.Aplicacion.Entidades
+
+
+@if(!Sesion.EstaLogueado()) {
+    NavigationManager.NavigateTo("/");
+
+}
+
 
 <h1>Listado de Persona</h1>
 <div class="container mt-4">

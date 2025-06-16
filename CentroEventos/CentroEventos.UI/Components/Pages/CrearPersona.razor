@@ -1,10 +1,14 @@
 @page "/crear-personas"
 @rendermode InteractiveServer
-
+@inject Sesion Sesion
 @inject NavigationManager Navegador
 @using CentroEventos.Aplicacion.Entidades
 @inject PersonaAltaUseCase personaAltaUseCase
 
+@if(!Sesion.EstaLogueado()) {
+    Navegador.NavigateTo("/");
+
+}
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -91,7 +95,8 @@
         
         try
         {
-             personaAltaUseCase.Ejecutar(_persona,1);
+            var idUsuario = Sesion.UsuarioActual?.Id ?? 0;
+             personaAltaUseCase.Ejecutar(_persona,idUsuario);
 
             _exito = "¡Persona creada exitosamente!";
             _persona = new Persona();

@@ -4,7 +4,10 @@
 @inject Sesion Sesion
 
 
+@if(!Sesion.EstaLogueado()) {
+    NavigationManager.NavigateTo("/");
 
+}
 
     <div class="container mt-4">
         <div class="row">

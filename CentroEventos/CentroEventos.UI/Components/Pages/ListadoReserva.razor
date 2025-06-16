@@ -5,9 +5,15 @@
 @inject ReservaListarUseCase reservaListarUseCase
 @inject ReservaBajaUseCase reservaBajaUseCase
 @inject ReservaModificacionUseCase reservaModificacionUseCase
+@inject NavigationManager NavigationManager
 
 @using CentroEventos.Aplicacion.Servicios
 @using CentroEventos.Aplicacion.Entidades
+
+@if(!Sesion.EstaLogueado()) {
+    NavigationManager.NavigateTo("/");
+
+}
 
 <h1>Listado de Reserva</h1>
 <div class="container mt-4">

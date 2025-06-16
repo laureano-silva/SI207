@@ -5,9 +5,14 @@
 @inject NavigationManager NavigationManager
 @inject Sesion Sesion
 @inject ListarEventosConCupoDisponibleUseCase listarEventosConCupoDisponibleUseCase
+@inject NavigationManager NavigationManager
 
 @using CentroEventos.Aplicacion.Entidades
 
+@if(!Sesion.EstaLogueado()) {
+    NavigationManager.NavigateTo("/");
+
+}
 
 <h1>Listado de Eventos con Cupo Disponible</h1>
 
