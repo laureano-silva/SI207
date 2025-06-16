@@ -16,12 +16,15 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Reserva Evento Deportivo</th>
-                <th>Fecha alta</th>
+                <th>Id Reserva</th>
+                <th>Fecha alta Reserva</th>
+                <th>Nombre </th>
+                <th>Apellido</th>
+                <th>Evento Deportivo</th>
+                <th>Fecha</th>
+                <th>Cupo Maximo</th>
+                <th>Duracion de Horas</th>
                 <th>Estado asistencia</th>
-                <th>Persona Id</th>
-                <th>Persona</th>
                 @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaModificacion) == true ||
                      Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaBaja) == true)
                 {
@@ -36,11 +39,14 @@
                 {
                     <tr>
                         <td>@rev.Id</td>
-                        <td>@rev.EventoDeportivo?.Nombre</td>
                         <td>@rev.FechaAltaReserva</td>
-                        <td>@rev.EstadoAsistencia</td>
-                        <td>@rev.PersonaId</td>
                         <td>@rev.Persona?.Nombre</td>
+                        <td>@rev.Persona?.Apellido</td>
+                        <td>@rev.EventoDeportivo?.Nombre</td>
+                        <td>@rev.EventoDeportivo?.FechaHoraInicio</td>
+                        <td>@rev.EventoDeportivo?.CupoMaximo</td>
+                        <td>@rev.EventoDeportivo?.DuracionHoras</td>
+                        <td>@rev.EstadoAsistencia</td>
                         @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaModificacion) == true ||
                              Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaBaja) == true)
                         {
