@@ -60,7 +60,7 @@
 
                                 @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaBaja) == true)
                                 {
-                                    <button class="btn btn-sm btn-danger" @onclick="() => ConfirmarEliminar(per.Id)">Eliminar</button>
+                                   <button class="btn btn-sm btn-danger" @onclick="() => MostrarModalEliminar(per)">Eliminar</button>
                                 }
                             </td>
                         }
@@ -75,6 +75,28 @@
             }
         </tbody>
     </table>
+  @if (personaAEliminar != null)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" @onclick="CancelarEliminacion"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que querés eliminar a <strong>@personaAEliminar.Nombre @personaAEliminar.Apellido</strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CancelarEliminacion">Cancelar</button>
+                    <button class="btn btn-danger" @onclick="EliminarConfirmado">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
     @if (personaSeleccionada != null)
 {
     <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
@@ -130,7 +152,7 @@
     Persona? personaSeleccionada;
     string? mensajeError;
     string? mensajeErrorModal;
-
+   Persona? personaAEliminar = null;
     protected override void OnInitialized()
     {
         _lista = personaListarUseCase.Ejecutar();
@@ -166,24 +188,43 @@
             var idUsuario = Sesion.UsuarioActual?.Id ?? 0;
             personaModificacionUseCase.Ejecutar(personaSeleccionada!,idUsuario);
 
-            // Refrescamos lista (podés optimizar reemplazando solo 1)
+         
             _lista = personaListarUseCase.Ejecutar();
 
             personaSeleccionada = null; // cerrar modal
         }
-        catch (Exception ex)
+     catch (DuplicadoException ex)
         {
-            mensajeErrorModal = "Ocurrió un error al guardar los cambios.";
+            mensajeError = $"Error de autorización: {ex.Message}";
+        }
+        catch (OperacionInvalidaException ex)
+        {
+            mensajeError = ex.Message;
+        }
+        catch (Exception)
+        {
+            mensajeError = "Error inesperado al eliminar persona.";
         }
     }
 
-    private async Task ConfirmarEliminar(int id)
+private void MostrarModalEliminar(Persona persona)
+{
+    personaAEliminar = persona;
+}
+
+private void CancelarEliminacion()
+{
+    personaAEliminar = null;
+}
+
+private void EliminarConfirmado()
+{
+    if (personaAEliminar != null)
     {
-        if (await JS.InvokeAsync<bool>("confirm", "¿Estás seguro que querés eliminar esta persona?"))
-        {
-            EliminarPersona(id);
-        }
+        EliminarPersona(personaAEliminar.Id);
+        personaAEliminar = null;
     }
+}
 
     private void EliminarPersona(int id)
     {
@@ -209,5 +250,5 @@
         }
     }
 
-    [Inject] IJSRuntime JS { get; set; } = default!;
+
 }

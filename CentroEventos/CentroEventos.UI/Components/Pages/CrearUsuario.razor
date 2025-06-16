@@ -119,6 +119,12 @@
             await Task.Delay(2000);
             Navegador.NavigateTo("/");
         }
+        
+         catch (DuplicadoException ex)
+        {
+            _error = $"Error de duplicacion: {ex.Message}";
+        }
+
         catch (Exception ex)
         {
             _error = "Error al crear usuario: " + ex.Message;

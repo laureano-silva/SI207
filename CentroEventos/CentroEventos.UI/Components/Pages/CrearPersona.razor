@@ -100,9 +100,17 @@
             await Task.Delay(1500); 
             Navegador.NavigateTo("/home");
         }
-        catch (Exception ex)
+    catch (DuplicadoException ex)
         {
-             _error = "Error al crear persona: " + ex.InnerException?.Message ?? ex.Message;
+            _error = $"Error de duplicacion: {ex.Message}";
+        }
+        catch (OperacionInvalidaException ex)
+        {
+            _error = ex.Message;
+        }
+        catch (Exception)
+        {
+            _error = "Error inesperado al crear persona.";
         }
         finally
         {
