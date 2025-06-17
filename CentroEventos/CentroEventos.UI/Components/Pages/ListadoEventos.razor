@@ -77,7 +77,10 @@
         </tbody>
     </table>
 </div>
-
+@if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoAlta) == true)
+{
+    <a class="btn btn-sm btn-primary mb-3" href="/crear-eventos">Agregar Evento</a>
+}
 @if (eventoParaEliminar != null)
 {
     <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
