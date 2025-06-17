@@ -203,15 +203,15 @@
         }
      catch (DuplicadoException ex)
         {
-            mensajeError = $"Error de autorización: {ex.Message}";
+            mensajeErrorModal = $"Error de autorización: {ex.Message}";
         }
         catch (OperacionInvalidaException ex)
         {
-            mensajeError = ex.Message;
+            mensajeErrorModal = ex.Message;
         }
         catch (Exception)
         {
-            mensajeError = "Error inesperado al eliminar persona.";
+            mensajeErrorModal = "Error inesperado al eliminar persona.";
         }
     }
 
@@ -257,6 +257,4 @@ private void EliminarConfirmado()
             mensajeError = "Error inesperado al eliminar persona.";
         }
     }
-
-
 }
