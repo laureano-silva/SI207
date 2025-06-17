@@ -2,15 +2,14 @@
 @rendermode InteractiveServer
 
 @inject Sesion Sesion
-
 @inject NavigationManager Navegador
-@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.Entidades   
 @inject EventoDeportivoAltaUseCase EventoDeportivoAltaUseCase
 @inject PersonaListarUseCase PersonaListarUseCase
 
-@if(!Sesion.EstaLogueado() || Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoAlta) != true) {
+@if (!Sesion.EstaLogueado() || Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoAlta) != true)
+{
     Navegador.NavigateTo("/");
-
 }
 
 <div class="container mt-5">
@@ -25,7 +24,7 @@
                     {
                         <div class="alert alert-danger">@_error</div>
                     }
-                    
+
                     @if (!string.IsNullOrEmpty(_exito))
                     {
                         <div class="alert alert-success">@_exito</div>
@@ -37,29 +36,45 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Descripcion</label>
-                        <input type="text" class="form-control" @bind="_evento.Descripcion" placeholder="Ingresa la descripcion">
+                        <label class="form-label">Descripción</label>
+                        <input type="text" class="form-control" @bind="_evento.Descripcion" placeholder="Ingresa la descripción">
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Fecha y hora del evento</label>
-                        <InputDate class="form-control"
-                            @bind-Value="_evento.FechaHoraInicio" />
+                        <label class="form-label">Fecha del evento</label>
+                        <input type="date"
+                               class="form-control"
+                               placeholder="dd/mm/aaaa"
+                               @bind="_fecha" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Hora del evento</label>
+                        <input type="time"
+                               class="form-control"
+                               placeholder="hh:mm"
+                               @bind="_hora" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Duración (horas)</label>
+                        <input type="number" class="form-control" @bind="_evento.DuracionHoras" placeholder="Ingresa la duración en horas">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Cupo</label>
-                        <input type="text" class="form-control" @bind="_evento.CupoMaximo" placeholder="Ingresa el cupo maximo">
+                        <input type="number" class="form-control" @bind="_evento.CupoMaximo" placeholder="Ingresa el cupo máximo">
                     </div>
 
                     <div class="mb-3">
-                        <label>Responsable</label>
-                            <InputSelect class="form-control" @bind-Value="_evento.PersonaId" placeholder="Seleccione una persona">
-                                @foreach (var persona in _personas)
-                                {
-                                    <option value="@persona.Id">@persona.Email</option>
-                                }
-                            </InputSelect>
+                        <label class="form-label">Responsable</label>
+                        <InputSelect class="form-control" @bind-Value="_evento.PersonaId">
+                            <option value="0" disabled selected>Seleccionar responsable</option>
+                            @foreach (var persona in _personas)
+                            {
+                                <option value="@persona.Id">@persona.Email</option>
+                            }
+                        </InputSelect>
                     </div>
 
                     <div class="d-grid gap-2">
@@ -79,46 +94,57 @@
 </div>
 
 @code {
-    List<Persona> _personas = new List<Persona>();
-    protected override void OnInitialized()
-    {
-        // Cargar la lista de personas al inicializar el componente
-        _personas = PersonaListarUseCase.Ejecutar();
-    }
-    EventoDeportivo _evento = new EventoDeportivo();
+    List<Persona> _personas = new();
+    EventoDeportivo _evento = new();
+
+    private DateTime? _fecha = null;
+    private TimeOnly? _hora = null;
+
     private string _error = string.Empty;
     private string _exito = string.Empty;
     private bool _cargando = false;
+
+    protected override void OnInitialized()
+    {
+        _personas = PersonaListarUseCase.Ejecutar();
+    }
 
     private async Task Aceptar()
     {
         _error = string.Empty;
         _exito = string.Empty;
 
-        if (string.IsNullOrWhiteSpace(_evento.Nombre) || 
+        if (string.IsNullOrWhiteSpace(_evento.Nombre) ||
             string.IsNullOrWhiteSpace(_evento.Descripcion) ||
-            string.IsNullOrWhiteSpace((_evento.FechaHoraInicio).ToString()) ||
-            string.IsNullOrWhiteSpace(_evento.PersonaId.ToString()))
+            _evento.CupoMaximo <= 0 ||
+            _evento.PersonaId == 0 ||
+            _fecha is null ||
+            _hora is null)
         {
-            _error = "Todos los campos son obligatorios";
+            _error = "Todos los campos son obligatorios y deben ser válidos.";
             return;
         }
 
+        _evento.FechaHoraInicio = _fecha.Value.Date + _hora.Value.ToTimeSpan();
+
         _cargando = true;
-        
+
         try
         {
-             EventoDeportivoAltaUseCase.Ejecutar(_evento,1);
-
+            EventoDeportivoAltaUseCase.Ejecutar(_evento, 1);
             _exito = "¡Evento creado exitosamente!";
-            _evento = new EventoDeportivo();
 
-            await Task.Delay(1500); 
+            // Resetear campos
+            _evento = new EventoDeportivo { PersonaId = 0 };
+            _fecha = null;
+            _hora = null;
+
+            await Task.Delay(1500);
             Navegador.NavigateTo("/listado-eventos");
         }
         catch (Exception ex)
         {
-            _error = "Error al crear evento: " + ex.InnerException?.Message ?? ex.Message;
+            _error = "Error al crear evento: " + (ex.InnerException?.Message ?? ex.Message);
         }
         finally
         {

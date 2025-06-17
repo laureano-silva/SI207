@@ -5,65 +5,74 @@
 @using CentroEventos.Aplicacion.Entidades
 @inject UsuarioAltaUseCase UsuarioAltaUseCase
 
-
-
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="mb-0">Crear Usuario</h4>
-                </div>
-                <div class="card-body">
-                    @if (!string.IsNullOrEmpty(_error))
-                    {
-                        <div class="alert alert-danger">@_error</div>
-                    }
-                    
-                    @if (!string.IsNullOrEmpty(_exito))
-                    {
-                        <div class="alert alert-success">@_exito</div>
-                    }
-
-                    <div class="mb-3">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" class="form-control" @bind="_usuario.Nombre" placeholder="Ingresa tu nombre">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Apellido</label>
-                        <input type="text" class="form-control" @bind="_usuario.Apellido" placeholder="Ingresa tu apellido">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" @bind="_usuario.Email" placeholder="correo@ejemplo.com">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" @bind="Contraseña" placeholder="Mínimo 6 caracteres">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Confirmar Contraseña</label>
-                        <input type="password" class="form-control" @bind="ConfirmarContraseña" placeholder="Repite la contraseña">
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary" @onclick="Aceptar" disabled="@_cargando">
-                            @if (_cargando)
-                            {
-                                <span class="spinner-border spinner-border-sm me-2"></span>
-                            }
-                            Crear Usuario
-                        </button>
-                        <button class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
-                    </div>
-                </div>
+   <div class="row justify-content-center">
+      <div class="col-md-6">
+         <div class="card">
+            <div class="card-header">
+               <h4 class="mb-0">Crear Usuario</h4>
             </div>
-        </div>
-    </div>
+            <div class="card-body">
+               @if (!string.IsNullOrEmpty(_error))
+               {
+               <div class="alert alert-danger">@_error</div>
+               }
+               @if (!string.IsNullOrEmpty(_exito))
+               {
+               <div class="alert alert-success">@_exito</div>
+               }
+               <div class="mb-3">
+                  <label class="form-label">Nombre</label>
+                  <input type="text" class="form-control" @bind="_usuario.Nombre" placeholder="Ingresa tu nombre">
+               </div>
+               <div class="mb-3">
+                  <label class="form-label">Apellido</label>
+                  <input type="text" class="form-control" @bind="_usuario.Apellido" placeholder="Ingresa tu apellido">
+               </div>
+               <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email"
+                     class="form-control"
+                     @bind="_usuario.Email"
+                     placeholder="correo@ejemplo.com"
+                     name="nuevocorreo812"
+                     id="nuevocorreo812"
+                     autocomplete="off" />
+               </div>
+               <div class="mb-3">
+                  <label class="form-label">Contraseña</label>
+                  <input type="password"
+                     class="form-control"
+                     @bind="Contraseña"
+                     placeholder="Mínimo 6 caracteres"
+                     name="clave812"
+                     id="clave812"
+                     autocomplete="new-password" />
+               </div>
+               <div class="mb-3">
+                  <label class="form-label">Confirmar Contraseña</label>
+                  <input type="password"
+                     class="form-control"
+                     @bind="ConfirmarContraseña"
+                     placeholder="Repite la contraseña"
+                     name="claveConfirmada812"
+                     id="claveConfirmada812"
+                     autocomplete="new-password" />
+               </div>
+               <div class="d-grid gap-2">
+                  <button class="btn btn-primary" @onclick="Aceptar" disabled="@_cargando">
+                  @if (_cargando)
+                  {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  }
+                  Crear Usuario
+                  </button>
+                  <button class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 </div>
 
 @code {

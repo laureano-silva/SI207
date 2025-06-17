@@ -37,7 +37,9 @@ public class RepositorioEventoDeportivo() : IRepositorioEventoDeportivo
     public List<EventoDeportivo> ListarEventoDeportivo()
     {
         using var context = new CentroEventosContext();
-        return context.Eventos.ToList();
+        return context.Eventos
+            .Include(e => e.Persona)
+            .ToList();
     }
 
     public void ModificarEventoDeportivo(EventoDeportivo evento)
@@ -54,6 +56,7 @@ public class RepositorioEventoDeportivo() : IRepositorioEventoDeportivo
         eventoExistente.DuracionHoras = evento.DuracionHoras;
         eventoExistente.CupoMaximo = evento.CupoMaximo;
         eventoExistente.PersonaId = evento.PersonaId;
+        context.SaveChanges();
     }
 
     public EventoDeportivo? ObtenerEventoDeportivo(int id)

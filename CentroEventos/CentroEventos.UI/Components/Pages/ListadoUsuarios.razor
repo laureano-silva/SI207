@@ -1,0 +1,219 @@
+@page "/control-acceso"
+@rendermode InteractiveServer
+
+@using CentroEventos.Aplicacion.Entidades
+@using CentroEventos.Aplicacion.Enumerativos
+@inject NavigationManager NavigationManager
+@inject Sesion Sesion
+@inject UsuarioListarUseCase UsuarioListarUseCase
+@inject UsuarioModificacionUseCase UsuarioModificacionUseCase
+@inject UsuarioBajaUseCase UsuarioBajaUseCase
+
+@if (!Sesion.EstaLogueado())
+{
+    NavigationManager.NavigateTo("/");
+}
+
+<h1>Listado de Usuarios</h1>
+
+@if (!string.IsNullOrEmpty(mensajeError))
+{
+    <div class="alert alert-danger">@mensajeError</div>
+}
+
+<div class="container mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Permisos</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usuario in _usuarios)
+            {
+                <tr>
+                    <td>@usuario.Id</td>
+                    <td>@usuario.Nombre @usuario.Apellido</td>
+                    <td>@usuario.Email</td>
+                    <td>
+                        @foreach (var permiso in usuario.Permisos)
+                        {
+                            <span class="badge bg-secondary me-1">@permiso</span>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-1" @onclick="() => AbrirModalEditar(usuario)">Editar</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => MostrarModalEliminar(usuario)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (usuarioSeleccionado != null)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Usuario</h5>
+                    <button type="button" class="btn-close" @onclick="CerrarModal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Nombre</label>
+                        <input class="form-control" @bind="usuarioSeleccionado.Nombre" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Apellido</label>
+                        <input class="form-control" @bind="usuarioSeleccionado.Apellido" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input class="form-control" @bind="usuarioSeleccionado.Email" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Contraseña (opcional)</label>
+                        <input class="form-control" type="password" @bind="_nuevaPassword" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Permisos</label>
+                        @foreach (Permiso permiso in Enum.GetValues<Permiso>())
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox"
+                                       value="@permiso"
+                                       @onchange="e => TogglePermiso(permiso, ((ChangeEventArgs)e).Value as bool?)"
+                                       checked="@usuarioSeleccionado.Permisos.Contains(permiso)" />
+                                <label class="form-check-label">@permiso</label>
+                            </div>
+                        }
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(mensajeErrorModal))
+                    {
+                        <div class="alert alert-danger mt-3">@mensajeErrorModal</div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" @onclick="GuardarCambios">Guardar</button>
+                    <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (usuarioParaEliminar != null)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" @onclick="CancelarEliminacion"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Seguro que querés eliminar a <strong>@usuarioParaEliminar.Nombre @usuarioParaEliminar.Apellido</strong>?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" @onclick="EliminarConfirmado">Eliminar</button>
+                    <button class="btn btn-secondary" @onclick="CancelarEliminacion">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    List<Usuario> _usuarios = new();
+    Usuario? usuarioSeleccionado;
+    Usuario? usuarioParaEliminar;
+    string? mensajeError;
+    string? mensajeErrorModal;
+    string? _nuevaPassword;
+
+    protected override void OnInitialized()
+    {
+        _usuarios = UsuarioListarUseCase.Ejecutar();
+    }
+
+    private void AbrirModalEditar(Usuario u)
+    {
+        usuarioSeleccionado = new Usuario
+        {
+            Id = u.Id,
+            Nombre = u.Nombre,
+            Apellido = u.Apellido,
+            Email = u.Email,
+            Permisos = new List<Permiso>(u.Permisos)
+        };
+        _nuevaPassword = string.Empty;
+        mensajeErrorModal = null;
+    }
+
+    private void CerrarModal()
+    {
+        usuarioSeleccionado = null;
+        mensajeErrorModal = null;
+        _nuevaPassword = null;
+    }
+
+    private void GuardarCambios()
+    {
+        mensajeErrorModal = null;
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(_nuevaPassword))
+                usuarioSeleccionado!.EstablecerContraseña(_nuevaPassword);
+
+            UsuarioModificacionUseCase.Ejecutar(usuarioSeleccionado!, Sesion.UsuarioActual!.Id);
+            _usuarios = UsuarioListarUseCase.Ejecutar();
+            usuarioSeleccionado = null;
+        }
+        catch (Exception ex)
+        {
+            mensajeErrorModal = $"Error al modificar usuario: {ex.Message}";
+        }
+    }
+
+    private void TogglePermiso(Permiso permiso, bool? checkedValue)
+    {
+        if (usuarioSeleccionado is null || checkedValue is null) return;
+
+        if (checkedValue.Value)
+            usuarioSeleccionado.Permisos.Add(permiso);
+        else
+            usuarioSeleccionado.Permisos.Remove(permiso);
+    }
+
+    private void MostrarModalEliminar(Usuario u)
+    {
+        usuarioParaEliminar = u;
+    }
+
+    private void CancelarEliminacion()
+    {
+        usuarioParaEliminar = null;
+    }
+
+    private void EliminarConfirmado()
+    {
+        try
+        {
+            var idAdmin = Sesion.UsuarioActual?.Id ?? 0;
+            UsuarioBajaUseCase.Ejecutar(usuarioParaEliminar!.Id, idAdmin);
+            _usuarios = UsuarioListarUseCase.Ejecutar();
+            usuarioParaEliminar = null;
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error al eliminar usuario: {ex.Message}";
+        }
+    }
+}

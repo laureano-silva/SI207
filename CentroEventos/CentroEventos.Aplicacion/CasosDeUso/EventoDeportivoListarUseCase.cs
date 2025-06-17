@@ -16,5 +16,4 @@ public class EventoDeportivoListarUseCase(IRepositorioEventoDeportivo repositori
         }
         return eventos;
     }
-
 }

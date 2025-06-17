@@ -12,41 +12,50 @@
         <div class="col-md-4">
             <h3 class="text-center mb-4">Iniciar Sesión</h3>
 
-            <div class="card p-4 shadow">
-                <div class="form-group">
-                    @if (!string.IsNullOrEmpty(_error))
-                    {
-                        <div class="alert alert-danger">@_error</div>
-                    }
-                    
-                    @if (!string.IsNullOrEmpty(_exito))
-                    {
-                        <div class="alert alert-success">@_exito</div>
-                    }
-                    
-                    <label for="email">Usuario</label>
-                    <input @bind="_email" class="form-control" id="email" placeholder="Ingrese su email" />
-                </div>
-
-                <div class="form-group mt-3">
-                    <label for="password">Contraseña</label>
-                    <input @bind="_password" type="password" class="form-control" id="password" placeholder="Ingrese su contraseña" />
-                </div>
-
-                <div class="mt-4">
-                    <button class="btn btn-primary w-100" @onclick="IniciarSesion" disabled="@_cargando">
-                        @if (_cargando)
+            <form autocomplete="on" @onsubmit="IniciarSesion" @onsubmit:preventDefault="false">
+                <div class="card p-4 shadow">
+                    <div class="form-group">
+                        @if (!string.IsNullOrEmpty(_error))
                         {
-                            <span class="spinner-border spinner-border-sm me-2"></span>
+                            <div class="alert alert-danger">@_error</div>
                         }
-                        Ingresar
-                    </button>
-                </div>
 
-                <div class="mt-2 text-center">
-                    <a href="/crearusuario">Crear usuario</a>
+                        <label for="email">Usuario</label>
+                        <input type attributes= "text"
+                            id="email"
+                            name="email"
+                            autocomplete="username"
+                            class="form-control"
+                            placeholder="Ingrese su email"
+                            @bind="_email"/>
+                    </div
+
+                    <div class="form-group mt-3">
+                        <label for="password">Contraseña</label>
+                        <input type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Ingrese su contraseña"
+                            autocomplete="current-password" 
+                            @bind="_password"/> 
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary w-100" disabled="@_cargando">
+                            @if (_cargando)
+                            {
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                            }
+                            Ingresar
+                        </button>
+                    </div>
+
+                    <div class="mt-2 text-center">
+                        <a href="/crearusuario">Crear usuario</a>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -54,14 +63,12 @@
 @code {
     private string _email = "";
     private string _password = "";
-    private string _exito = "";
     private string _error = "";
     private bool _cargando = false;
 
     private async Task IniciarSesion()
     {
         _error = "";
-        _exito = "";
         _cargando = true;
 
         try
@@ -70,14 +77,10 @@
             
             if (resultado.Exitoso)
             {
-                _exito = "¡Sesión iniciada correctamente!";
-                Sesion.Iniciar(resultado.Usuario!);
-                
-  
-                StateHasChanged();
                 await Task.Delay(1000);
-                
-                NavigationManager.NavigateTo("/home", forceLoad: true);
+                Sesion.Iniciar(resultado.Usuario!);
+                StateHasChanged();
+                NavigationManager.NavigateTo("/home");
             }
             else
             {
