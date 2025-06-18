@@ -1,14 +1,11 @@
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Entidades;
-using CentroEventos.Aplicacion.Enumerativos;
 using CentroEventos.Aplicacion.Excepciones;
-using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 public class ListarAsistenciaAEventoUseCase(IRepositorioReserva repositorioReserva, IRepositorioEventoDeportivo repositorioEventoDeportivo, IRepositorioPersona repositorioPersona)
 {
-    public List<Persona> Ejecutar(int idEvento)
+    public List<Reserva> Ejecutar(int idEvento)
     {
-        List<Persona> personas = new List<Persona>();
         List<Reserva> reservas = repositorioReserva.ListarReserva();
         EventoDeportivo? evento = repositorioEventoDeportivo.ObtenerEventoDeportivo(idEvento);
         if (evento is null)
@@ -19,21 +16,13 @@ public class ListarAsistenciaAEventoUseCase(IRepositorioReserva repositorioReser
         {
             throw new EntidadNotFoundException("Solo puede consultar la asistencia de eventos pasados.");
         }
-        foreach (Reserva r in reservas) //itero sobre las reservas recuperando las personas que asistieron al evento
-        {
-            if (r.EventoDeportivoId == idEvento)
+        return repositorioReserva.ListarReserva()
+            .Where(r => r.EventoDeportivoId == idEvento)
+            .Select(r => 
             {
-                Persona? persona = repositorioPersona.ObtenerPersona(r.PersonaId); // cambiar nombre del metodo a ObtenerPersona o algo asi
-                if (persona is null)
-                {
-                    throw new EntidadNotFoundException("La persona no existe.");
-                }
-                if (r.EstadoAsistencia == EstadoAsistencia.Presente)
-                {
-                    personas.Add(persona);
-                }
-            }
-        }
-        return personas;
+                r.Persona = repositorioPersona.ObtenerPersona(r.PersonaId);
+                return r;
+            })
+            .ToList();
     }
 }

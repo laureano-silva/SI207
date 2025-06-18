@@ -5,10 +5,11 @@
 @inject NavigationManager Navegador
 @inject ReservaAltaUseCase ReservaAltaUseCase
 @inject PersonaListarUseCase PersonaListarUseCase
+@inject ListarEventosConCupoDisponibleUseCase ListarEventosConCupoDisponibleUseCase
+
 
 @if(!Sesion.EstaLogueado() || Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaAlta) != true) {
     Navegador.NavigateTo("/");
-
 }
 
 <div class="container mt-5">
@@ -32,7 +33,7 @@
                     <div class="mb-3">
                         <label class="form-label">Persona Id</label>
                         <InputSelect class="form-control" @bind-Value="_reserva.PersonaId">
-                            <option value="0" disabled selected>Seleccionar responsable</option>
+                            <option value="0" disabled selected>Seleccionar persona</option>
                             @foreach (var persona in _personas)
                             {
                                 <option value="@persona.Id">@persona.Nombre @persona.Apellido - @persona.Email</option>
@@ -41,8 +42,15 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Evento Deportivo Id</label>
-                        <input type="number" class="form-control" @bind="_reserva.EventoDeportivoId" placeholder="Ingresa el evento deportivo Id">
+                        <label class="form-label">Evento</label>
+                        <InputSelect class="form-control" @bind-Value="_reserva.EventoDeportivoId">
+                            <option value="0" disabled selected>Eventos disponibles</option>
+                            @foreach (var evento in _eventosConCupoDisponible)
+                            {
+                                <option value="@evento.Id">@evento.Nombre - @evento.FechaHoraInicio.ToString()</option>
+                            }
+
+                        </InputSelect>
                     </div>
 
                     <div class="d-grid gap-2">
@@ -63,6 +71,7 @@
 
 @code {
     Reserva _reserva = new Reserva();
+    private List<EventoDeportivo> _eventosConCupoDisponible = new List<EventoDeportivo>();
     private string _error = string.Empty;
     private string _exito = string.Empty;
     private bool _cargando = false;
@@ -70,6 +79,7 @@
     protected override void OnInitialized()
     {
         _personas = PersonaListarUseCase.Ejecutar();
+        _eventosConCupoDisponible = ListarEventosConCupoDisponibleUseCase.Ejecutar();
     }
 
     private async Task Aceptar()
@@ -82,7 +92,7 @@
         try
         {
 
-        if (_reserva.PersonaId <= 0)
+        if (_reserva.PersonaId <= 0)    
         {
             _error = "Debe ingresar un ID de persona válido";
             return;
@@ -103,7 +113,7 @@
             _reserva = new Reserva();
 
             await Task.Delay(1500); 
-            Navegador.NavigateTo("/home");
+            Navegador.NavigateTo("/listado-reservas");
         }
           catch (FalloAutorizacionException ex)
         {
@@ -131,7 +141,6 @@
             _cargando = false;
         }
     }
-
     private void Cancelar()
     {
         Navegador.NavigateTo("/home");
