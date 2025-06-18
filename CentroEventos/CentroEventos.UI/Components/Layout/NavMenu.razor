@@ -167,7 +167,7 @@
                 }
 
                 <div class="nav-item-custom">
-                    <NavLink class="nav-link-custom" href="listado-reserva">
+                    <NavLink class="nav-link-custom" href="listado-reservas">
                         <i class="bi bi-calendar-check-fill nav-icon"></i>
                         <span>Listado de Reservas</span>
                     </NavLink>
@@ -190,13 +190,6 @@
                     </NavLink>
                 </div>
 
-                <div class="nav-item-custom">
-                    <NavLink class="nav-link-custom" href="listado-eventos-cupoDisponible">
-                        <i class="bi bi-calendar-check-fill nav-icon"></i>
-                        <span>Eventos con Cupo Disponible</span>
-                    </NavLink>
-                </div>
-
                 @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoAlta) == true)
                 {
                     <div class="nav-item-custom">
@@ -207,11 +200,21 @@
                     </div>
                 }
 
-                @if (
-                    Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta) == true ||
-                    Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioBaja) == true ||
-                    Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioModificacion) == true
-                    )
+                 <div class="nav-item-custom">
+                    <NavLink class="nav-link-custom" href="listado-eventos-cupoDisponible">
+                        <i class="bi bi-calendar-check-fill nav-icon"></i>
+                        <span>Eventos con Cupo Disponible</span>
+                    </NavLink>
+                </div>
+
+                <div class="nav-item-custom">
+                    <NavLink class="nav-link-custom" href="asistencia-a-eventos">
+                        <i class="bi bi-calendar-check-fill nav-icon"></i>
+                        <span>Asistencia a Eventos</span>
+                    </NavLink>
+                </div>
+
+                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta | Permiso.UsuarioBaja | Permiso.UsuarioModificacion) == true)
                 {
                     <div class="nav-item-custom">
                         <NavLink class="nav-link-custom" href="control-acceso">
