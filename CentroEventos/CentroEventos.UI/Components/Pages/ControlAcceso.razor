@@ -207,10 +207,10 @@
 
             _usuarios = UsuarioListarUseCase.Ejecutar();
 
-            if (Sesion.UsuarioActual?.Id == usuarioSeleccionado?.Id)
-            {
-                
-                Sesion.UsuarioActual = usuarioObtenerPorIdUseCase.Ejecutar(usuarioSeleccionado.Id);
+          if (Sesion.UsuarioActual!.Id == usuarioSeleccionado!.Id)
+                {
+                int id = usuarioSeleccionado!.Id;
+                Sesion.UsuarioActual = usuarioObtenerPorIdUseCase.Ejecutar(id);
                 StateHasChanged();
 
                 // Redirigir si ya no tiene permisos

@@ -214,7 +214,11 @@
                     </NavLink>
                 </div>
 
-                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta | Permiso.UsuarioBaja | Permiso.UsuarioModificacion) == true)
+                @if (
+                    Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta) == true ||
+                    Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioBaja) == true ||
+                    Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioModificacion) == true
+                    )
                 {
                     <div class="nav-item-custom">
                         <NavLink class="nav-link-custom" href="control-acceso">
