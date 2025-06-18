@@ -13,6 +13,7 @@ public class UsuarioBajaUseCase(IRepositorioUsuario repoUsuario, IServicioAutori
         {
             throw new FalloAutorizacionException("error Autorizacion");
         }
+        
         repoUsuario.EliminarUsuario(id);
     }
 }

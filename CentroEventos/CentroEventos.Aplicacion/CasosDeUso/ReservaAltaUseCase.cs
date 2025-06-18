@@ -25,15 +25,14 @@ public class ReservaAltaUseCase(IRepositorioReserva repo, ReservaValidador valid
 
             case CodigoValidacion.DuplicadoError:
                 throw new DuplicadoException(resultado.Mensaje);
-            case CodigoValidacion.CupoExedido:
+            case CodigoValidacion.CupoExcedido:
                 throw new ValidacionException(resultado.Mensaje);
 
             default:
-                throw new Exception("C�digo de validaci�n no reconocido.");
+                throw new Exception("Código de validación no reconocido.");
         }
 
         reserva.FechaAltaReserva = DateTime.Now;
-
         repo.AgregarReserva(reserva);
     }
 }

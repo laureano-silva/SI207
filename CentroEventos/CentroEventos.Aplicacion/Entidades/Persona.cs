@@ -8,8 +8,7 @@ public class Persona
     public string Dni { get; set; } = "";
     public string Telefono { get; set; } = "";
     public string Email { get; set; } = "";
-
-
+    
     public Persona()
     {
     }

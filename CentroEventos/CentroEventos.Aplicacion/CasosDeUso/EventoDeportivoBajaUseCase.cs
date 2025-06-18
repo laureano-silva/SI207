@@ -1,8 +1,6 @@
 using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Enumerativos;
 using CentroEventos.Aplicacion.Excepciones;
-using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
 public class EventoDeportivoBajaUseCase(IRepositorioEventoDeportivo repoEvento, IRepositorioReserva repoReserva, IServicioAutorizacion auth)
@@ -13,6 +11,7 @@ public class EventoDeportivoBajaUseCase(IRepositorioEventoDeportivo repoEvento, 
         {
             throw new FalloAutorizacionException("error Autorizacion");
         }
+
         var reservas = repoReserva.ListarReserva();
         foreach (var reserva in reservas)
         {
@@ -21,6 +20,7 @@ public class EventoDeportivoBajaUseCase(IRepositorioEventoDeportivo repoEvento, 
                 throw new OperacionInvalidaException("No se puede eliminar el evento deportivo porque tiene reservas asociadas.");
             }
         }
+        
         repoEvento.EliminarEventoDeportivo(id);
     }
 }

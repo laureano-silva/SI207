@@ -13,6 +13,7 @@ public class ReservaModificacionUseCase(IRepositorioReserva repo, IServicioAutor
         {
             throw new FalloAutorizacionException("error Autorizacion");
         }
+        
         try
         {
             repo.ModificarReserva(reserva);

@@ -9,7 +9,6 @@ public class UsuarioModificacionUseCase(IRepositorioUsuario repo, UsuarioValidad
 {
     public void Ejecutar(Usuario usuario, int usuarioId)
     {
-        // si el usuario se modifica a si mismo, ignorar permisos
         var usuarioActual = repo.ObtenerUsuario(usuario.Id);
         if (usuarioActual is null)
         {

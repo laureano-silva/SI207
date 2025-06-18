@@ -13,6 +13,7 @@ public class PersonaBajaUseCase(IRepositorioPersona repoPersona, IRepositorioEve
         {
             throw new FalloAutorizacionException("error Autorizacion");
         }
+
         var eventos = repoEvento.ListarEventoDeportivo();
         foreach (var evento in eventos)
         {
@@ -21,6 +22,7 @@ public class PersonaBajaUseCase(IRepositorioPersona repoPersona, IRepositorioEve
                 throw new OperacionInvalidaException("No se puede eliminar la persona porque tiene eventos deportivos asociados.");
             }
         }
+        
         var reservas = repoReserva.ListarReserva();
         foreach (var reserva in reservas)
         {
@@ -29,6 +31,7 @@ public class PersonaBajaUseCase(IRepositorioPersona repoPersona, IRepositorioEve
                 throw new OperacionInvalidaException("No se puede eliminar la persona porque tiene reservas asociadas.");
             }
         }
+        
         repoPersona.EliminarPersona(id);
     }
 }

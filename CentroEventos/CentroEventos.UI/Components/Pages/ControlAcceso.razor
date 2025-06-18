@@ -95,12 +95,17 @@
                                 <label>Permisos</label>
                                 @foreach (Permiso permiso in Enum.GetValues<Permiso>())
                                 {
+                                    var id = $"permiso_{(int)permiso}";
+
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox"
-                                               value="@permiso"
-                                               @onchange="e => TogglePermiso(permiso, ((ChangeEventArgs)e).Value as bool?)"
-                                               checked="@usuarioSeleccionado.Permisos.Contains(permiso)" />
-                                        <label class="form-check-label">@permiso</label>
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            id="@id"
+                                            value="@permiso"
+                                            @onchange="e => TogglePermiso(permiso, ((ChangeEventArgs)e).Value as bool?)"
+                                            checked="@usuarioSeleccionado.Permisos.Contains(permiso)" />
+
+                                        <label class="form-check-label" for="@id">@permiso</label>
                                     </div>
                                 }
                             </div>

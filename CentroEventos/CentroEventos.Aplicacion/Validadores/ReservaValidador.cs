@@ -62,7 +62,7 @@ public class ReservaValidador
         }
         if (!HayCupoDisponible(reserva.EventoDeportivoId))
         {
-            return (CodigoValidacion.CupoExedido, "No hay cupo disponible para el evento seleccionado.");
+            return (CodigoValidacion.CupoExcedido, "No hay cupo disponible para el evento seleccionado.");
             
         }
 

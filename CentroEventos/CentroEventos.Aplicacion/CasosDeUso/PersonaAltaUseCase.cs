@@ -9,7 +9,7 @@ public class PersonaAltaUseCase(IRepositorioPersona repo, PersonaValidador valid
 {
     public void Ejecutar(Persona persona, int usuarioId)
     {
-          if (!auth.EstaAutorizado(usuarioId, Permiso.PersonaAlta))
+        if (!auth.EstaAutorizado(usuarioId, Permiso.PersonaAlta))
         {
             throw new FalloAutorizacionException("error Autorizacion");
         }
@@ -30,6 +30,7 @@ public class PersonaAltaUseCase(IRepositorioPersona repo, PersonaValidador valid
             default:
                 throw new Exception("Código de validación no reconocido.");
         }
+
         repo.AgregarPersona(persona);
     }
 }

@@ -13,8 +13,9 @@ public class UsuarioListarUseCase(IRepositorioUsuario repositorioUsuario)
         List<Usuario> usuarios = repositorioUsuario.ListarUsuario();
         if (usuarios.Count == 0)
         {
-            throw new EntidadNotFoundException("No hay usuarios registradoss.");
+            throw new EntidadNotFoundException("No hay usuarios registrados.");
         }
+
         return usuarios;
     }
 }

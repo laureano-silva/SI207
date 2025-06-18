@@ -8,17 +8,20 @@ public class ListarAsistenciaAEventoUseCase(IRepositorioReserva repositorioReser
     {
         List<Reserva> reservas = repositorioReserva.ListarReserva();
         EventoDeportivo? evento = repositorioEventoDeportivo.ObtenerEventoDeportivo(idEvento);
+
         if (evento is null)
         {
             throw new EntidadNotFoundException("El evento no existe.");
         }
+        
         if (evento.FechaHoraInicio > DateTime.Now)
         {
             throw new EntidadNotFoundException("Solo puede consultar la asistencia de eventos pasados.");
         }
+        
         return repositorioReserva.ListarReserva()
             .Where(r => r.EventoDeportivoId == idEvento)
-            .Select(r => 
+            .Select(r =>
             {
                 r.Persona = repositorioPersona.ObtenerPersona(r.PersonaId);
                 return r;

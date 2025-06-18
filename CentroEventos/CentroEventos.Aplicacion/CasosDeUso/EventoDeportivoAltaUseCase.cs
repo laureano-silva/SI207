@@ -1,5 +1,3 @@
-using System.Data.Common;
-
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Enumerativos;
@@ -17,7 +15,6 @@ public class EventoDeportivoAltaUseCase(IRepositorioEventoDeportivo repo, Evento
         }
 
         var resultado = validador.Validar(evento);
-
         if (resultado.Codigo == CodigoValidacion.ValidacionError)
         {
             throw new ValidacionException(resultado.Mensaje);

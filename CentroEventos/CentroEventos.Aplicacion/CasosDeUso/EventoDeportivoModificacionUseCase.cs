@@ -13,18 +13,18 @@ public class EventoDeportivoModificacionUseCase(IRepositorioEventoDeportivo repo
         {
             throw new FalloAutorizacionException("error Autorizacion");
         }
+
         if (evento.FechaHoraInicio < DateTime.Now)
         {
             throw new OperacionInvalidaException("No se pueden modificar eventos pasados");
-        }   
-       
-           var resultado = validador.Validar(evento);
+        }
+        
+        var resultado = validador.Validar(evento);
         if (resultado.Codigo == CodigoValidacion.ValidacionError)
         {
             throw new ValidacionException(resultado.Mensaje);
         }
+
         repo.ModificarEventoDeportivo(evento);
-        
-      
     }
 }

@@ -114,7 +114,7 @@ else
                             <option value="0" disabled selected>Seleccionar responsable</option>
                             @foreach (var persona in _personas)
                             {
-                                <option value="@persona.Id">@persona.Email</option>
+                                <option value="@persona.Id">@persona.Nombre @persona.Apellido - @persona.Email</option>
                             }
                         </InputSelect>
                     </div>

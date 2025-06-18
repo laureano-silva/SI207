@@ -4,8 +4,5 @@ public enum CodigoValidacion
     SinErrores,
     ValidacionError,
     DuplicadoError,
-    CupoExedido
-
-
+    CupoExcedido
 }
-

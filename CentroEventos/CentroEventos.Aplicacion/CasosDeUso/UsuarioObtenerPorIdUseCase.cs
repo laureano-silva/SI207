@@ -12,8 +12,7 @@ public class UsuarioObtenerPorIdUseCase(IRepositorioUsuario repo)
         var usuarioActual = repo.ObtenerUsuario(usuarioId);
         if (usuarioActual is null)
         {
-            throw new EntidadNotFoundException("Usuario no encontrado.");
-           
+            throw new EntidadNotFoundException("Usuario no encontrado.");           
         }
 
         return repo.ObtenerPorId(usuarioId)!;

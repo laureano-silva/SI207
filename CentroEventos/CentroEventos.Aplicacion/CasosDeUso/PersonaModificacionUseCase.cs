@@ -14,7 +14,6 @@ public class PersonaModificacionUseCase(IRepositorioPersona repo, PersonaValidad
             throw new FalloAutorizacionException("error Autorizacion");
         }
 
-
       var resultado = validador.Validar(persona);
         switch (resultado.Codigo)
         {
@@ -32,7 +31,5 @@ public class PersonaModificacionUseCase(IRepositorioPersona repo, PersonaValidad
         }
 
         repo.ModificarPersona(persona);
-
-
     }
 }

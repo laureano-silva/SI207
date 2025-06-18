@@ -28,13 +28,10 @@ public class CentroEventosContext : DbContext
      );
     }
 
-
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("data source=CentroEventos.db");
     }
-
 
     public static void Inicializar()
     {

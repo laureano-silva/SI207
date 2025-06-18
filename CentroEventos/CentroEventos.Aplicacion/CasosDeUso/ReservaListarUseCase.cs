@@ -10,9 +10,6 @@ public class ReservaListarUseCase(IRepositorioReserva repositorioReserva)
 
     public List<Reserva> Ejecutar()
     {
-        List<Reserva> reserva = repositorioReserva.ListarReserva();
-
-        return reserva;
+        return repositorioReserva.ListarReserva();
     }
-
 }

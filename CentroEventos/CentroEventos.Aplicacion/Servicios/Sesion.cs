@@ -5,7 +5,6 @@ namespace CentroEventos.Aplicacion.Servicios;
 public class Sesion
 {
     public Usuario? UsuarioActual { get; set; }
-    
     public event Action? OnSesionCambiada;
     public event Action? OnSesionActualizada;
 
