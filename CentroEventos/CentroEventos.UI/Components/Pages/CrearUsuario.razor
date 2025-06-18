@@ -124,9 +124,6 @@
             Contraseña = string.Empty;
             ConfirmarContraseña = string.Empty;
             
-            // Esperar un momento para mostrar el mensaje y luego navegar
-            await Task.Delay(2000);
-            Navegador.NavigateTo("/");
         }
         
          catch (DuplicadoException ex)

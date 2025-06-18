@@ -55,7 +55,7 @@ builder.Services.AddTransient<PersonaValidador>();
 builder.Services.AddTransient<EventoDeportivoValidador>();
 builder.Services.AddTransient<ReservaValidador>();
 builder.Services.AddTransient<UsuarioValidador>();
-builder.Services.AddSingleton<Sesion>();
+builder.Services.AddScoped<Sesion>();
 
 var app = builder.Build();
 

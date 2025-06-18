@@ -21,14 +21,14 @@
                         }
 
                         <label for="email">Usuario</label>
-                        <input type attributes= "text"
+                        <input type="email" attributes= "text"
                             id="email"
                             name="email"
                             autocomplete="username"
                             class="form-control"
                             placeholder="Ingrese su email"
                             @bind="_email"/>
-                    </div
+                    </div>
 
                     <div class="form-group mt-3">
                         <label for="password">Contraseña</label>
@@ -99,12 +99,5 @@
         }
     }
 
-    protected override void OnInitialized()
-    {
-        // Si ya hay una sesión iniciada, redirigir al home
-        if (Sesion.EstaLogueado())
-        {
-            NavigationManager.NavigateTo("/home");
-        }
-    }
+    
 }
