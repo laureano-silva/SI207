@@ -30,7 +30,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Email</th>
@@ -49,7 +48,6 @@
                 @foreach (var per in _lista)
                 {
                     <tr>
-                        <td>@per.Id</td>
                         <td>@per.Nombre</td>
                         <td>@per.Apellido</td>
                         <td>@per.Email</td>
@@ -208,6 +206,10 @@
         catch (OperacionInvalidaException ex)
         {
             mensajeErrorModal = ex.Message;
+        }
+          catch (FalloAutorizacionException ex)
+        {
+            mensajeErrorModal = $"Error de autorización: {ex.Message}";
         }
         catch (Exception)
         {

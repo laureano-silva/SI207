@@ -8,9 +8,9 @@ public class ReservaBajaUseCase(IRepositorioReserva repo, IServicioAutorizacion 
 {
     public void Ejecutar(int id, int IdUsuario)
     {
-    if (!auth.EstaAutorizado(IdUsuario, Permiso.ReservaBaja, out string errorAutorizacion))
+    if (!auth.EstaAutorizado(IdUsuario, Permiso.ReservaBaja))
         {
-            throw new FalloAutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException("error Autorizacion");
         }
         repo.EliminarReserva(id);
     }

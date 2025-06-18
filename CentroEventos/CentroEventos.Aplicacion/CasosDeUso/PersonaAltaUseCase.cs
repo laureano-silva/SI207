@@ -9,9 +9,9 @@ public class PersonaAltaUseCase(IRepositorioPersona repo, PersonaValidador valid
 {
     public void Ejecutar(Persona persona, int usuarioId)
     {
-          if (!auth.EstaAutorizado(usuarioId, Permiso.UsuarioAlta, out string errorAutorizacion))
+          if (!auth.EstaAutorizado(usuarioId, Permiso.PersonaAlta))
         {
-            throw new FalloAutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException("error Autorizacion");
         }
 
         var resultado = validador.Validar(persona);

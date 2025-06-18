@@ -156,7 +156,7 @@
                     </NavLink>
                 </div>
 
-                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta) == true)
+                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.PersonaAlta) == true)
                 {
                     <div class="nav-item-custom">
                         <NavLink class="nav-link-custom" href="crear-personas">
@@ -207,7 +207,7 @@
                     </div>
                 }
 
-                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta & Permiso.UsuarioBaja & Permiso.UsuarioModificacion & Permiso.PersonaAlta & Permiso.PersonaBaja & Permiso.PersonaModificacion) == true)
+                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta | Permiso.UsuarioBaja | Permiso.UsuarioModificacion) == true)
                 {
                     <div class="nav-item-custom">
                         <NavLink class="nav-link-custom" href="control-acceso">
@@ -222,7 +222,7 @@
                 @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta) == true)
                 {
                     <div class="nav-item-custom">
-                        <NavLink class="nav-link-custom" href="crearusuario">
+                        <NavLink class="nav-link-custom" href="crear-usuario">
                             <i class="bi bi-person-plus-fill nav-icon"></i>
                             <span>Crear Usuario</span>
                         </NavLink>

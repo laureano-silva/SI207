@@ -20,7 +20,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Id Reserva</th>
                 <th>Fecha alta Reserva</th>
                 <th>Nombre </th>
                 <th>Apellido</th>
@@ -42,7 +41,6 @@
                 @foreach (var rev in _lista)
                 {
                     <tr>
-                        <td>@rev.Id</td>
                         <td>@rev.FechaAltaReserva</td>
                         <td>@rev.Persona?.Nombre</td>
                         <td>@rev.Persona?.Apellido</td>
@@ -181,6 +179,10 @@
             _lista = reservaListarUseCase.Ejecutar() ?? new List<Reserva>();
             reservaSeleccionada = null;
         }
+          catch (FalloAutorizacionException ex)
+        {
+            mensajeErrorModal = $"Error de autorización: {ex.Message}";
+        }
         catch (Exception)
         {
             mensajeErrorModal = "Error al guardar los cambios.";
@@ -213,6 +215,10 @@
             var idUsuario = Sesion.UsuarioActual?.Id ?? 0;
             reservaBajaUseCase.Ejecutar(id, idUsuario);
             _lista = reservaListarUseCase.Ejecutar();
+        }
+          catch (FalloAutorizacionException ex)
+        {
+            mensajeErrorModal = $"Error de autorización: {ex.Message}";
         }
         catch (Exception)
         {

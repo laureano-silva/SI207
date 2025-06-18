@@ -11,9 +11,9 @@ public class EventoDeportivoAltaUseCase(IRepositorioEventoDeportivo repo, Evento
 {
     public void Ejecutar(EventoDeportivo evento, int IdUsuario)
     {
-        if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoAlta, out string errorAutorizacion))
+        if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoAlta))
         {
-            throw new FalloAutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException("error Autorizacion");
         }
 
         var resultado = validador.Validar(evento);

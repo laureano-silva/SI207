@@ -9,9 +9,9 @@ public class EventoDeportivoBajaUseCase(IRepositorioEventoDeportivo repoEvento, 
 {
     public void Ejecutar(int id, int IdUsuario)
     {
-        if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoBaja, out string errorAutorizacion))
+        if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoBaja))
         {
-            throw new FalloAutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException("error Autorizacion");
         }
         var reservas = repoReserva.ListarReserva();
         foreach (var reserva in reservas)

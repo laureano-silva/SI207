@@ -9,9 +9,9 @@ public class UsuarioBajaUseCase(IRepositorioUsuario repoUsuario, IServicioAutori
 {
     public void Ejecutar(int id, int idUsuario)
     {
-        if (!auth.EstaAutorizado(idUsuario, Permiso.UsuarioBaja, out string errorAutorizacion))
+        if (!auth.EstaAutorizado(idUsuario, Permiso.UsuarioBaja))
         {
-            throw new FalloAutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException("error Autorizacion");
         }
         repoUsuario.EliminarUsuario(id);
     }

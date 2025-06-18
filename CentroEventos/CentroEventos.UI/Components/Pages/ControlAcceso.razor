@@ -9,7 +9,7 @@
 @inject UsuarioModificacionUseCase UsuarioModificacionUseCase
 @inject UsuarioBajaUseCase UsuarioBajaUseCase
 
-@if (!Sesion.EstaLogueado())
+@if (!Sesion.EstaLogueado() | Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta) != true | Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioBaja) != true | Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioModificacion) != true)
 {
     NavigationManager.NavigateTo("/");
 }
@@ -25,19 +25,24 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nombre</th>
+                <th>Apellido</th>
                 <th>Email</th>
                 <th>Permisos</th>
-                <th>Acciones</th>
+                 @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioModificacion) == true ||
+                     Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioBaja) == true)
+                {
+                    <th>Acción</th>
+                }
             </tr>
         </thead>
         <tbody>
             @foreach (var usuario in _usuarios)
             {
                 <tr>
-                    <td>@usuario.Id</td>
-                    <td>@usuario.Nombre @usuario.Apellido</td>
+
+                    <td>@usuario.Nombre </td>
+                    <td>@usuario.Apellido</td>
                     <td>@usuario.Email</td>
                     <td>
                         @foreach (var permiso in usuario.Permisos)
@@ -46,8 +51,17 @@
                         }
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-primary me-1" @onclick="() => AbrirModalEditar(usuario)">Editar</button>
-                        <button class="btn btn-sm btn-danger" @onclick="() => MostrarModalEliminar(usuario)">Eliminar</button>
+                        <div class="d-flex gap-2">
+                            @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioModificacion) == true)
+                            {
+                                <a class="btn btn-sm btn-primary" @onclick="() => AbrirModalEditar(usuario)">Editar</a>
+                            }
+
+                            @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioBaja) == true)
+                            {
+                                <button class="btn btn-sm btn-danger" @onclick="() => MostrarModalEliminar(usuario)">Eliminar</button>
+                            }
+                            </div>
                     </td>
                 </tr>
             }
@@ -184,8 +198,13 @@
                 usuarioSeleccionado!.EstablecerContraseña(_nuevaPassword);
             }
             UsuarioModificacionUseCase.Ejecutar(usuarioSeleccionado!, Sesion.UsuarioActual!.Id);
+            StateHasChanged();
             _usuarios = UsuarioListarUseCase.Ejecutar();
             usuarioSeleccionado = null;
+        }
+          catch (FalloAutorizacionException ex)
+        {
+            mensajeErrorModal = $"Error de autorización: {ex.Message}";
         }
         catch (Exception ex)
         {
@@ -221,6 +240,10 @@
             UsuarioBajaUseCase.Ejecutar(usuarioParaEliminar!.Id, id);
             _usuarios = UsuarioListarUseCase.Ejecutar();
             usuarioParaEliminar = null;
+        }
+          catch (FalloAutorizacionException ex)
+        {
+            mensajeErrorModal = $"Error de autorización: {ex.Message}";
         }
         catch (Exception ex)
         {

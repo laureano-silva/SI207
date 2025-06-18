@@ -9,9 +9,9 @@ public class ReservaModificacionUseCase(IRepositorioReserva repo, IServicioAutor
 {
     public void Ejecutar(Reserva reserva, int IdUsuario)
     {
-        if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoModificacion, out string errorAutorizacion))
+        if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoModificacion))
         {
-            throw new FalloAutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException("error Autorizacion");
         }
         try
         {

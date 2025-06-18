@@ -27,7 +27,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nombre</th>
                 <th>Descripcion</th>
                 <th>Fecha y hora</th>
@@ -47,7 +46,6 @@
                 @foreach (var evento in _lista)
                 {
                     <tr>
-                        <td>@evento.Id</td>
                         <td>@evento.Nombre</td>
                         <td>@evento.Descripcion</td>
                         <td>@evento.FechaHoraInicio</td>
@@ -55,15 +53,17 @@
                         <td>@evento.CupoMaximo</td>
                         <td>@evento.Persona?.Email</td>
                         <td>
-                            @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoModificacion) == true)
-                            {
-                                <a class="btn btn-sm btn-primary" @onclick="() => AbrirModalEditar(evento)">Editar</a>
-                            }
+                            <div class="d-flex gap-2">
+                                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoModificacion) == true)
+                                {
+                                    <a class="btn btn-sm btn-primary" @onclick="() => AbrirModalEditar(evento)">Editar</a>
+                                }
 
-                            @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoBaja) == true)
-                            {
-                                <button class="btn btn-sm btn-danger" @onclick="() => MostrarModalEliminar(evento)">Eliminar</button>
-                            }
+                                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.EventoBaja) == true)
+                                {
+                                    <button class="btn btn-sm btn-danger" @onclick="() => MostrarModalEliminar(evento)">Eliminar</button>
+                                }
+                                </div>
                         </td>
                     </tr>
                 }
@@ -236,6 +236,10 @@
         catch (OperacionInvalidaException ex)
         {
             mensajeErrorModal = $"Operación inválida: {ex.Message}";
+        }
+          catch (FalloAutorizacionException ex)
+        {
+            mensajeErrorModal = $"Error de autorización: {ex.Message}";
         }
         catch (Exception)
         {

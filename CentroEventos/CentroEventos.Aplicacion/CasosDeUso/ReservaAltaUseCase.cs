@@ -8,9 +8,9 @@ public class ReservaAltaUseCase(IRepositorioReserva repo, ReservaValidador valid
 {
     public void Ejecutar(Reserva reserva, int idUsuario)
     {
-        if (!auth.EstaAutorizado(idUsuario, Permiso.ReservaAlta, out string errorAutorizacion))
+        if (!auth.EstaAutorizado(idUsuario, Permiso.ReservaAlta))
         {
-            throw new FalloAutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException("error Autorizacion");
         }
 
         var resultado = validador.Validar(reserva);

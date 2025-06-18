@@ -9,9 +9,9 @@ public class PersonaBajaUseCase(IRepositorioPersona repoPersona, IRepositorioEve
 {
     public void Ejecutar(int id, int idUsuario)
     {
-        if (!auth.EstaAutorizado(idUsuario, Permiso.UsuarioBaja, out string errorAutorizacion))
+        if (!auth.EstaAutorizado(idUsuario, Permiso.PersonaBaja))
         {
-            throw new FalloAutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException("error Autorizacion");
         }
         var eventos = repoEvento.ListarEventoDeportivo();
         foreach (var evento in eventos)

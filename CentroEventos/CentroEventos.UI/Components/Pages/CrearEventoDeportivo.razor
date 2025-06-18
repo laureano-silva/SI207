@@ -131,7 +131,10 @@
 
         try
         {
-            EventoDeportivoAltaUseCase.Ejecutar(_evento, 1);
+
+            var idUsuario = Sesion.UsuarioActual!.Id;
+
+            EventoDeportivoAltaUseCase.Ejecutar(_evento, idUsuario);
             _exito = "¡Evento creado exitosamente!";
 
             // Resetear campos
@@ -141,6 +144,10 @@
 
             await Task.Delay(1500);
             Navegador.NavigateTo("/listado-eventos");
+        }
+          catch (FalloAutorizacionException ex)
+        {
+            _error = $"Error de autorización: {ex.Message}";
         }
         catch (Exception ex)
         {

@@ -18,9 +18,9 @@ public class UsuarioModificacionUseCase(IRepositorioUsuario repo, UsuarioValidad
 
         // si el usuario se quiere modificar a si mismo no se requieren permisos
         if (usuarioActual.Id != usuario.Id &&
-            !auth.EstaAutorizado(usuarioId, Permiso.UsuarioModificacion, out string errorAutorizacion))
+            !auth.EstaAutorizado(usuarioId, Permiso.UsuarioModificacion))
         {
-            throw new FalloAutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException("error Autorizacion");
         }
 
         var resultado = validador.Validar(usuario, false);

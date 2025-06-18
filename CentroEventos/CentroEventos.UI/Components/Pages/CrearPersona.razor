@@ -95,7 +95,10 @@
         
         try
         {
+
+            
             var idUsuario = Sesion.UsuarioActual!.Id;
+             Console.WriteLine($"{idUsuario}");
              personaAltaUseCase.Ejecutar(_persona,idUsuario);
 
             _exito = "¡Persona creada exitosamente!";

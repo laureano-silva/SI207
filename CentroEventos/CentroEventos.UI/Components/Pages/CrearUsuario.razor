@@ -1,4 +1,4 @@
-@page "/crearusuario"
+@page "/crear-usuario"
 @rendermode InteractiveServer
 
 @inject NavigationManager Navegador
@@ -132,6 +132,10 @@
          catch (DuplicadoException ex)
         {
             _error = $"Error de duplicacion: {ex.Message}";
+        }
+          catch (FalloAutorizacionException ex)
+        {
+            _error = $"Error de autorización: {ex.Message}";
         }
 
         catch (Exception ex)

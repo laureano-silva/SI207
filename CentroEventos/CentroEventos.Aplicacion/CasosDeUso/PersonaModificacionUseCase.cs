@@ -9,9 +9,9 @@ public class PersonaModificacionUseCase(IRepositorioPersona repo, PersonaValidad
 {
     public void Ejecutar(Persona persona, int userID)
     {
-        if (!auth.EstaAutorizado(userID, Permiso.UsuarioModificacion, out string errorAutorizacion))
+        if (!auth.EstaAutorizado(userID, Permiso.PersonaModificacion))
         {
-            throw new FalloAutorizacionException(errorAutorizacion);
+            throw new FalloAutorizacionException("error Autorizacion");
         }
 
 

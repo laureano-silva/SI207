@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Enumerativos;
+
 public interface IRepositorioUsuario
 {
     public void  AgregarUsuario(Usuario usuario);
@@ -14,7 +16,7 @@ public interface IRepositorioUsuario
 
     public void ModificarUsuario(Usuario usuario);
     
-    public bool ExisteUsuario(int id);
+    public bool ExisteUsuarioConPermiso(int id,Permiso permiso);
     public Usuario? ObtenerUsuario(int id);
     public Usuario? ObtenerUsuario(string email);
     List<Usuario> ListarUsuario();

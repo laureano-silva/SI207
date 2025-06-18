@@ -56,11 +56,19 @@ public class RepositorioUsuario() : IRepositorioUsuario
         context.Usuarios.Remove(usuario);
         context.SaveChanges();
     }
-    public bool ExisteUsuario(int id)
+    
+    public bool ExisteUsuarioConPermiso(int id, Permiso permiso)
     {
         using var context = new CentroEventosContext();
-        return context.Usuarios.Any(p => p.Id == id);
+
+        return context.Usuarios
+         .Any(u => u.Id == id && u.Permisos.Contains(permiso));
     }
+
+    
+
+
+
 
     public List<Usuario> ListarUsuario()
     {
@@ -86,6 +94,9 @@ public class RepositorioUsuario() : IRepositorioUsuario
         usuarioExistente.Permisos = [.. usuario.Permisos];
         context.SaveChanges();
     }
+
+
+
     public Usuario? ObtenerUsuario(int id)
     {
         using var context = new CentroEventosContext();
