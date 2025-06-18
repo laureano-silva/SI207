@@ -145,7 +145,6 @@
 @code {
     private List<Reserva> _lista = new();
     private Reserva? reservaSeleccionada;
-    private string? mensajeError;
     private string? mensajeErrorModal;
     private Reserva? reservaAEliminar;
 
@@ -217,7 +216,7 @@
         }
         catch (Exception)
         {
-            mensajeError = "Error al eliminar la reserva.";
+            mensajeErrorModal = "Error al eliminar la reserva.";
         }
     }
 }

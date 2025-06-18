@@ -7,7 +7,7 @@ namespace CentroEventos.Aplicacion.CasosDeUso;
 
 public class UsuarioModificacionUseCase(IRepositorioUsuario repo, UsuarioValidador validador, IServicioAutorizacion auth)
 {
-    public void Ejecutar(Usuario usuario, int userId)
+    public void Ejecutar(Usuario usuario, int usuarioId)
     {
         // si el usuario se modifica a si mismo, ignorar permisos
         var usuarioActual = repo.ObtenerUsuario(usuario.Id);
@@ -18,12 +18,12 @@ public class UsuarioModificacionUseCase(IRepositorioUsuario repo, UsuarioValidad
 
         // si el usuario se quiere modificar a si mismo no se requieren permisos
         if (usuarioActual.Id != usuario.Id &&
-            !auth.EstaAutorizado(userId, Permiso.UsuarioModificacion, out string errorAutorizacion))
+            !auth.EstaAutorizado(usuarioId, Permiso.UsuarioModificacion, out string errorAutorizacion))
         {
             throw new FalloAutorizacionException(errorAutorizacion);
         }
 
-        var resultado = validador.Validar(usuario);
+        var resultado = validador.Validar(usuario, false);
         switch (resultado.Codigo)
         {
             case CodigoValidacion.SinErrores:

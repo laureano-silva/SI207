@@ -53,7 +53,7 @@
             }
         </tbody>
     </table>
-</div>
+
 
 @if (usuarioSeleccionado != null)
 {
@@ -79,7 +79,7 @@
                     </div>
                     <div class="mb-3">
                         <label>Contraseña (opcional)</label>
-                        <input class="form-control" type="password" @bind="_nuevaPassword" />
+                        <input class="form-control" type="password" @bind="_nuevaPassword" name="clave812" id="clave812" autocomplete="new-password"/>
                     </div>
                     <div class="mb-3">
                         <label>Permisos</label>
@@ -129,6 +129,11 @@
         </div>
     </div>
 }
+@if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta) == true)
+{
+    <a class="btn btn-sm btn-primary mb-3" href="/crear-usuario">Agregar Usuario</a>
+}
+</div>
 
 @code {
     List<Usuario> _usuarios = new();
@@ -161,7 +166,7 @@
     {
         usuarioSeleccionado = null;
         mensajeErrorModal = null;
-        _nuevaPassword = null;
+        _nuevaPassword = string.Empty;
     }
 
     private void GuardarCambios()
@@ -170,8 +175,14 @@
         try
         {
             if (!string.IsNullOrWhiteSpace(_nuevaPassword))
+            {
+                if (_nuevaPassword.Length < 6)
+                {
+                    mensajeErrorModal = "La contraseña debe tener al menos 6 caracteres.";
+                    return;
+                }
                 usuarioSeleccionado!.EstablecerContraseña(_nuevaPassword);
-
+            }
             UsuarioModificacionUseCase.Ejecutar(usuarioSeleccionado!, Sesion.UsuarioActual!.Id);
             _usuarios = UsuarioListarUseCase.Ejecutar();
             usuarioSeleccionado = null;
@@ -206,8 +217,8 @@
     {
         try
         {
-            var idAdmin = Sesion.UsuarioActual?.Id ?? 0;
-            UsuarioBajaUseCase.Ejecutar(usuarioParaEliminar!.Id, idAdmin);
+            var id = Sesion.UsuarioActual?.Id ?? 0;
+            UsuarioBajaUseCase.Ejecutar(usuarioParaEliminar!.Id, id);
             _usuarios = UsuarioListarUseCase.Ejecutar();
             usuarioParaEliminar = null;
         }

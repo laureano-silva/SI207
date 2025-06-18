@@ -1,9 +1,10 @@
 @page "/crear-reserva"
 @rendermode InteractiveServer
+@using CentroEventos.Aplicacion.Entidades
 @inject Sesion Sesion
 @inject NavigationManager Navegador
-@using CentroEventos.Aplicacion.Entidades
-@inject ReservaAltaUseCase reservaAltaUseCase
+@inject ReservaAltaUseCase ReservaAltaUseCase
+@inject PersonaListarUseCase PersonaListarUseCase
 
 @if(!Sesion.EstaLogueado() || Sesion.UsuarioActual?.Permisos.Contains(Permiso.ReservaAlta) != true) {
     Navegador.NavigateTo("/");
@@ -27,11 +28,18 @@
                     {
                         <div class="alert alert-success">@_exito</div>
                     }
-
-              <div class="mb-3"> 
+                    
+                    <div class="mb-3">
                         <label class="form-label">Persona Id</label>
-                        <input type="number" class="form-control" @bind="_reserva.PersonaId" placeholder="Ingresa la persona Id">
+                        <InputSelect class="form-control" @bind-Value="_reserva.PersonaId">
+                            <option value="0" disabled selected>Seleccionar responsable</option>
+                            @foreach (var persona in _personas)
+                            {
+                                <option value="@persona.Id">@persona.Nombre @persona.Apellido - @persona.Email</option>
+                            }
+                        </InputSelect>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label">Evento Deportivo Id</label>
                         <input type="number" class="form-control" @bind="_reserva.EventoDeportivoId" placeholder="Ingresa el evento deportivo Id">
@@ -55,10 +63,14 @@
 
 @code {
     Reserva _reserva = new Reserva();
-
     private string _error = string.Empty;
     private string _exito = string.Empty;
     private bool _cargando = false;
+    private List<Persona> _personas = new List<Persona>();
+    protected override void OnInitialized()
+    {
+        _personas = PersonaListarUseCase.Ejecutar();
+    }
 
     private async Task Aceptar()
     {
@@ -85,7 +97,7 @@
 
 
             var nuevaReserva = new Reserva(_reserva.PersonaId, _reserva.EventoDeportivoId, EstadoAsistencia.Pendiente);
-            reservaAltaUseCase.Ejecutar(_reserva,1);
+            ReservaAltaUseCase.Ejecutar(_reserva,1);
 
             _exito = "Reserva creada exitosamente!";
             _reserva = new Reserva();

@@ -9,7 +9,7 @@ public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador valid
 {
     public void Ejecutar(Usuario usuario)
     {
-        var resultado = validador.Validar(usuario);
+        var resultado = validador.Validar(usuario, true);
 
         switch (resultado.Codigo)
         {

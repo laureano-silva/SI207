@@ -28,7 +28,7 @@ public class UsuarioValidador
             p.Email.Equals(usuario.Email, StringComparison.OrdinalIgnoreCase) && p.Id != usuario.Id);
     }
 
-    public (CodigoValidacion Codigo, string Mensaje) Validar(Usuario usuario)
+    public (CodigoValidacion Codigo, string Mensaje) Validar(Usuario usuario, bool esNuevo)
     {
         if (string.IsNullOrWhiteSpace(usuario.Nombre))
             return (CodigoValidacion.ValidacionError, "El nombre no puede estar vacío.");
@@ -40,17 +40,15 @@ public class UsuarioValidador
         if (string.IsNullOrEmpty(usuario.Email))
         {
             return (CodigoValidacion.ValidacionError, "El email no puede estar vacío");
-            
         }
-        if (!this.EsEmailUnico(usuario))
+        if (!EsEmailUnico(usuario))
         {
             return (CodigoValidacion.DuplicadoError, "El email no puede estar repetido");
         }
-        if (string.IsNullOrEmpty(usuario.Password))
+        if (esNuevo && string.IsNullOrEmpty(usuario.Password))
         {
             return (CodigoValidacion.ValidacionError, "La contraseña no puede estar vacía");
         }
         return (CodigoValidacion.SinErrores, "");
-
     }
 }

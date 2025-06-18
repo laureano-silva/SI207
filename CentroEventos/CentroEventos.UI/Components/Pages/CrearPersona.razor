@@ -95,7 +95,7 @@
         
         try
         {
-            var idUsuario = Sesion.UsuarioActual?.Id ?? 0;
+            var idUsuario = Sesion.UsuarioActual!.Id;
              personaAltaUseCase.Ejecutar(_persona,idUsuario);
 
             _exito = "¡Persona creada exitosamente!";
@@ -104,13 +104,17 @@
             await Task.Delay(1500); 
             Navegador.NavigateTo("/home");
         }
-    catch (DuplicadoException ex)
+        catch (DuplicadoException ex)
         {
             _error = $"Error de duplicacion: {ex.Message}";
         }
         catch (OperacionInvalidaException ex)
         {
             _error = ex.Message;
+        }
+        catch (FalloAutorizacionException ex)
+        {
+            _error = $"Error de autorización: {ex.Message}";
         }
         catch (Exception)
         {

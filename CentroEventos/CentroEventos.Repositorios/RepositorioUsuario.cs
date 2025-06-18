@@ -79,8 +79,11 @@ public class RepositorioUsuario() : IRepositorioUsuario
         usuarioExistente.Nombre = usuario.Nombre;
         usuarioExistente.Apellido = usuario.Apellido;
         usuarioExistente.Email = usuario.Email;
-        usuarioExistente.EstablecerContraseña(usuario.Password);
-        usuarioExistente.Email = usuario.Email;
+        if (!string.IsNullOrEmpty(usuario.Password))
+        {
+            usuarioExistente.EstablecerContraseña(usuario.Password);    
+        }
+        usuarioExistente.Permisos = [.. usuario.Permisos];
         context.SaveChanges();
     }
     public Usuario? ObtenerUsuario(int id)

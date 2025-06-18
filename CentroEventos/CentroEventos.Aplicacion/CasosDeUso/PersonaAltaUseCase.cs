@@ -7,9 +7,9 @@ namespace CentroEventos.Aplicacion.CasosDeUso;
 
 public class PersonaAltaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion auth)
 {
-    public void Ejecutar(Persona persona, int userID)
+    public void Ejecutar(Persona persona, int usuarioId)
     {
-          if (!auth.EstaAutorizado(userID, Permiso.UsuarioAlta, out string errorAutorizacion))
+          if (!auth.EstaAutorizado(usuarioId, Permiso.UsuarioAlta, out string errorAutorizacion))
         {
             throw new FalloAutorizacionException(errorAutorizacion);
         }
@@ -28,9 +28,8 @@ public class PersonaAltaUseCase(IRepositorioPersona repo, PersonaValidador valid
                 throw new ValidacionException(resultado.Mensaje);
 
             default:
-                throw new Exception("C�digo de validaci�n no reconocido.");
+                throw new Exception("Código de validación no reconocido.");
         }
-
         repo.AgregarPersona(persona);
     }
 }
