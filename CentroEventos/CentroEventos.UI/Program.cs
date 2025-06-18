@@ -39,6 +39,7 @@ builder.Services.AddTransient<UsuarioModificacionUseCase>();
 builder.Services.AddTransient<UsuarioBajaUseCase>();
 builder.Services.AddTransient<UsuarioListarUseCase>();
 builder.Services.AddTransient<UsuarioLoginUseCase>();
+builder.Services.AddTransient<UsuarioObtenerPorIdUseCase>();
 
 builder.Services.AddTransient<EventoDeportivoAltaUseCase>();
 builder.Services.AddTransient<EventoDeportivoModificacionUseCase>();

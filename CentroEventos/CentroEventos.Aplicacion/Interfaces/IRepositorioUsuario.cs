@@ -12,6 +12,9 @@ public interface IRepositorioUsuario
 {
     public void  AgregarUsuario(Usuario usuario);
 
+
+    public Usuario? ObtenerPorId(int id);
+
     public void EliminarUsuario(int id);
 
     public void ModificarUsuario(Usuario usuario);

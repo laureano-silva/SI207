@@ -134,7 +134,7 @@
                     </NavLink>
                 </div>
                 <div class="nav-item-custom">
-                    <NavLink class="nav-link-custom" href="crearusuario">
+                    <NavLink class="nav-link-custom" href="crear-usuario">
                         <i class="bi bi-person-plus-fill nav-icon"></i>
                         <span>Crear Usuario</span>
                     </NavLink>
@@ -190,7 +190,7 @@
                     </NavLink>
                 </div>
 
-                 <div class="nav-item-custom">
+                <div class="nav-item-custom">
                     <NavLink class="nav-link-custom" href="listado-eventos-cupoDisponible">
                         <i class="bi bi-calendar-check-fill nav-icon"></i>
                         <span>Eventos con Cupo Disponible</span>
@@ -207,7 +207,11 @@
                     </div>
                 }
 
-                @if (Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta | Permiso.UsuarioBaja | Permiso.UsuarioModificacion) == true)
+                @if (
+                    Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioAlta) == true ||
+                    Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioBaja) == true ||
+                    Sesion.UsuarioActual?.Permisos.Contains(Permiso.UsuarioModificacion) == true
+                    )
                 {
                     <div class="nav-item-custom">
                         <NavLink class="nav-link-custom" href="control-acceso">
