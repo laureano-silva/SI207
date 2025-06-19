@@ -4,7 +4,7 @@ namespace CentroEventos.Aplicacion.CasosDeUso;
 public class EventoDeportivoListarUseCase(IRepositorioEventoDeportivo repositorioEventoDeportivo)
 {
 
-    public List<EventoDeportivo> Ejecutar(bool eventoPasado = true)
+    public List<EventoDeportivo> Ejecutar(bool eventoPasado = false)
     {
         if (eventoPasado)
         {

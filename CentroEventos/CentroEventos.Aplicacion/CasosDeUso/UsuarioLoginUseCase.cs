@@ -19,7 +19,7 @@ public class UsuarioLoginUseCase(IRepositorioUsuario repo)
 
         if (usuario.Password != hash)
         {
-            return ResultadoLogin.Fallo("Cointraseña incorrecta");
+            return ResultadoLogin.Fallo("Contraseña incorrecta");
         }
 
         return ResultadoLogin.Ok(usuario);

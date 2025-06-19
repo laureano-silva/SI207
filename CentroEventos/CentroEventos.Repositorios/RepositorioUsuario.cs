@@ -42,7 +42,9 @@ public class RepositorioUsuario() : IRepositorioUsuario
         context.SaveChanges();
     }
 }
-    
+
+
+
     public void EliminarUsuario(int id)
     {
         using var context = new CentroEventosContext();
