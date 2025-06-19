@@ -17,15 +17,15 @@ public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador valid
                 break;
 
             case CodigoValidacion.DuplicadoError:
-               throw new DuplicadoException(resultado.Mensaje);
+                throw new DuplicadoException(resultado.Mensaje);
 
             case CodigoValidacion.ValidacionError:
                 throw new ValidacionException(resultado.Mensaje);
 
             default:
-                throw new Exception("Codigo de validacion no reconocido.");
+                throw new Exception("Codigo de validacion desconocido.");
         }
-        
-      repo.AgregarUsuario(usuario);
+
+        repo.AgregarUsuario(usuario);
     }
 }

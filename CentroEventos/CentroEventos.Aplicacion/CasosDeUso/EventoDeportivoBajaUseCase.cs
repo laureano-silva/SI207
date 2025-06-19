@@ -3,13 +3,13 @@ using CentroEventos.Aplicacion.Enumerativos;
 using CentroEventos.Aplicacion.Excepciones;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
-public class EventoDeportivoBajaUseCase(IRepositorioEventoDeportivo repoEvento, IRepositorioReserva repoReserva, IServicioAutorizacion auth)
+public class EventoDeportivoBajaUseCase(IRepositorioEventoDeportivo repoEvento, IRepositorioReserva repoReserva, IServicioAutorizacion autorizacion)
 {
     public void Ejecutar(int id, int IdUsuario)
     {
-        if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoBaja))
+        if (!autorizacion.EstaAutorizado(IdUsuario, Permiso.EventoBaja))
         {
-            throw new FalloAutorizacionException("error Autorizacion");
+            throw new FalloAutorizacionException("El usuario no cuenta con los permisos necesarios.");
         }
 
         var reservas = repoReserva.ListarReserva();

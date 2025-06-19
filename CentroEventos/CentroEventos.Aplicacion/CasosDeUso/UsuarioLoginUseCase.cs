@@ -11,7 +11,7 @@ public class UsuarioLoginUseCase(IRepositorioUsuario repo)
         var usuario = repo.ObtenerUsuario(email);
         if (usuario is null)
         {
-            return ResultadoLogin.Fallo("El email no está registrado.");
+            return ResultadoLogin.Fallo("El usuario no está registrado");
         }
 
         using var sha256 = SHA256.Create();
@@ -19,7 +19,7 @@ public class UsuarioLoginUseCase(IRepositorioUsuario repo)
 
         if (usuario.Password != hash)
         {
-            return ResultadoLogin.Fallo("La contraseña es incorrecta.");
+            return ResultadoLogin.Fallo("Cointraseña incorrecta");
         }
 
         return ResultadoLogin.Ok(usuario);

@@ -10,4 +10,5 @@ public interface IRepositorioEventoDeportivo
     void EliminarEventoDeportivo(int id);
     bool ExisteEventoDeportivo(int id);
     List<EventoDeportivo> ListarEventoDeportivo();
+    List<EventoDeportivo>ListarEventoDeportivoPasado();
 }

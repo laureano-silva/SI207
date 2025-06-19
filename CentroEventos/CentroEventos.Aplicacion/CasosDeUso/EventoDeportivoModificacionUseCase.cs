@@ -5,13 +5,13 @@ using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
-public class EventoDeportivoModificacionUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion auth)
+public class EventoDeportivoModificacionUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizacion)
 {
     public void Ejecutar(EventoDeportivo evento, int IdUsuario)
     {
-        if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoModificacion))
+        if (!autorizacion.EstaAutorizado(IdUsuario, Permiso.EventoModificacion))
         {
-            throw new FalloAutorizacionException("error Autorizacion");
+            throw new FalloAutorizacionException("El usuario no cuenta con los permisos necesarios.");
         }
 
         if (evento.FechaHoraInicio < DateTime.Now)

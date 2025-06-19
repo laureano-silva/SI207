@@ -42,6 +42,14 @@ public class RepositorioEventoDeportivo() : IRepositorioEventoDeportivo
             .ToList();
     }
 
+     public List<EventoDeportivo> ListarEventoDeportivoPasado()
+    {
+        using var context = new CentroEventosContext();
+        return context.Eventos
+            .Include(e => e.Persona)
+            .Where(e => e.FechaHoraInicio < DateTime.Now)
+            .ToList();
+    }
     public void ModificarEventoDeportivo(EventoDeportivo evento)
     {
         using var context = new CentroEventosContext();

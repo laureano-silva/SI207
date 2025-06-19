@@ -5,13 +5,13 @@ using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
-public class PersonaAltaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion auth)
+public class PersonaAltaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizacion)
 {
     public void Ejecutar(Persona persona, int usuarioId)
     {
-        if (!auth.EstaAutorizado(usuarioId, Permiso.PersonaAlta))
+        if (!autorizacion.EstaAutorizado(usuarioId, Permiso.PersonaAlta))
         {
-            throw new FalloAutorizacionException("error Autorizacion");
+            throw new FalloAutorizacionException("El usuario no cuenta con los permisos necesarios.");
         }
 
         var resultado = validador.Validar(persona);
@@ -28,7 +28,7 @@ public class PersonaAltaUseCase(IRepositorioPersona repo, PersonaValidador valid
                 throw new ValidacionException(resultado.Mensaje);
 
             default:
-                throw new Exception("Código de validación no reconocido.");
+                throw new Exception("Código de validación desconocido.");
         }
 
         repo.AgregarPersona(persona);

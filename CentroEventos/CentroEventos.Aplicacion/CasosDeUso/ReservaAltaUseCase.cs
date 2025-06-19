@@ -4,13 +4,13 @@ using CentroEventos.Aplicacion.Enumerativos;
 using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
-public class ReservaAltaUseCase(IRepositorioReserva repo, ReservaValidador validador, IServicioAutorizacion auth)
+public class ReservaAltaUseCase(IRepositorioReserva repo, ReservaValidador validador, IServicioAutorizacion autorizacion)
 {
     public void Ejecutar(Reserva reserva, int idUsuario)
     {
-        if (!auth.EstaAutorizado(idUsuario, Permiso.ReservaAlta))
+        if (!autorizacion.EstaAutorizado(idUsuario, Permiso.ReservaAlta))
         {
-            throw new FalloAutorizacionException("error Autorizacion");
+            throw new FalloAutorizacionException("El usuario no cuenta con los permisos necesarios.");
         }
 
         var resultado = validador.Validar(reserva);
@@ -29,7 +29,7 @@ public class ReservaAltaUseCase(IRepositorioReserva repo, ReservaValidador valid
                 throw new ValidacionException(resultado.Mensaje);
 
             default:
-                throw new Exception("Código de validación no reconocido.");
+                throw new Exception("Código de validación desconocido.");
         }
 
         reserva.FechaAltaReserva = DateTime.Now;

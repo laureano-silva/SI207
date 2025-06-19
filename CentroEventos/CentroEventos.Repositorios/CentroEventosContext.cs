@@ -36,9 +36,19 @@ public class CentroEventosContext : DbContext
     public static void Inicializar()
     {
         using var context = new CentroEventosContext();
+
         if (context.Database.EnsureCreated())
         {
             Console.WriteLine("Se creó base de datos");
+        }
+
+        var connection = context.Database.GetDbConnection();
+        connection.Open();
+
+        using (var command = connection.CreateCommand())
+        {
+            command.CommandText = "PRAGMA journal_mode=DELETE;";
+            command.ExecuteNonQuery();
         }
     }
 }

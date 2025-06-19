@@ -1,17 +1,15 @@
 using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Enumerativos;
 using CentroEventos.Aplicacion.Excepciones;
-using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
-public class PersonaBajaUseCase(IRepositorioPersona repoPersona, IRepositorioEventoDeportivo repoEvento, IRepositorioReserva repoReserva, IServicioAutorizacion auth)
+public class PersonaBajaUseCase(IRepositorioPersona repoPersona, IRepositorioEventoDeportivo repoEvento, IRepositorioReserva repoReserva, IServicioAutorizacion autorizacion)
 {
     public void Ejecutar(int id, int idUsuario)
     {
-        if (!auth.EstaAutorizado(idUsuario, Permiso.PersonaBaja))
+        if (!autorizacion.EstaAutorizado(idUsuario, Permiso.PersonaBaja))
         {
-            throw new FalloAutorizacionException("error Autorizacion");
+            throw new FalloAutorizacionException("El usuario no cuenta con los permisos necesarios.");
         }
 
         var eventos = repoEvento.ListarEventoDeportivo();

@@ -31,9 +31,7 @@ public class RepositorioUsuario() : IRepositorioUsuario
             Permiso.ReservaAlta,
             Permiso.ReservaModificacion,
             Permiso.ReservaBaja,
-            Permiso.UsuarioAlta,
-            Permiso.UsuarioModificacion,
-            Permiso.UsuarioBaja,
+            Permiso.GestionUsuarios,
             Permiso.PersonaAlta,
             Permiso.PersonaBaja,
             Permiso.PersonaModificacion

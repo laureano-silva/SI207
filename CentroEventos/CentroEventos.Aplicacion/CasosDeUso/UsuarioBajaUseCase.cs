@@ -1,17 +1,20 @@
 using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Enumerativos;
 using CentroEventos.Aplicacion.Excepciones;
-using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
-public class UsuarioBajaUseCase(IRepositorioUsuario repoUsuario, IServicioAutorizacion auth)
+public class UsuarioBajaUseCase(IRepositorioUsuario repoUsuario, IServicioAutorizacion autorizacion)
 {
     public void Ejecutar(int id, int idUsuario)
     {
-        if (!auth.EstaAutorizado(idUsuario, Permiso.UsuarioBaja))
+        if (id == idUsuario)
         {
-            throw new FalloAutorizacionException("error Autorizacion");
+            throw new ValidacionException("El usuario no puede eliminarse a sí mismo.");
+        }
+
+        if (!autorizacion.EstaAutorizado(idUsuario, Permiso.GestionUsuarios))
+        {
+            throw new FalloAutorizacionException("El usuario no cuenta con los permisos necesarios.");
         }
         
         repoUsuario.EliminarUsuario(id);

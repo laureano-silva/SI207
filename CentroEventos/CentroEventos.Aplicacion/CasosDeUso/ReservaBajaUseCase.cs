@@ -1,16 +1,14 @@
 using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Enumerativos;
 using CentroEventos.Aplicacion.Excepciones;
-using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
-public class ReservaBajaUseCase(IRepositorioReserva repo, IServicioAutorizacion auth)
+public class ReservaBajaUseCase(IRepositorioReserva repo, IServicioAutorizacion autorizacion)
 {
     public void Ejecutar(int id, int IdUsuario)
     {
-        if (!auth.EstaAutorizado(IdUsuario, Permiso.ReservaBaja))
+        if (!autorizacion.EstaAutorizado(IdUsuario, Permiso.ReservaBaja))
             {
-                throw new FalloAutorizacionException("error Autorizacion");
+                throw new FalloAutorizacionException("El usuario no cuenta con los permisos necesarios.");
             }
 
         repo.EliminarReserva(id);

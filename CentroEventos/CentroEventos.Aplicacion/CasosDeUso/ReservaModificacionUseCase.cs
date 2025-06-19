@@ -2,16 +2,15 @@ using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Enumerativos;
 using CentroEventos.Aplicacion.Excepciones;
-using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
-public class ReservaModificacionUseCase(IRepositorioReserva repo, IServicioAutorizacion auth)
+public class ReservaModificacionUseCase(IRepositorioReserva repo, IServicioAutorizacion autorizacion)
 {
     public void Ejecutar(Reserva reserva, int IdUsuario)
     {
-        if (!auth.EstaAutorizado(IdUsuario, Permiso.EventoModificacion))
+        if (!autorizacion.EstaAutorizado(IdUsuario, Permiso.EventoModificacion))
         {
-            throw new FalloAutorizacionException("error Autorizacion");
+            throw new FalloAutorizacionException("El usuario no cuenta con los permisos necesarios.");
         }
         
         try

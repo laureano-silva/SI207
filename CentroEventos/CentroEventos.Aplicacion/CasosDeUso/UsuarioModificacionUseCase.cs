@@ -5,7 +5,7 @@ using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Validadores;
 namespace CentroEventos.Aplicacion.CasosDeUso;
 
-public class UsuarioModificacionUseCase(IRepositorioUsuario repo, UsuarioValidador validador, IServicioAutorizacion auth)
+public class UsuarioModificacionUseCase(IRepositorioUsuario repo, UsuarioValidador validador, IServicioAutorizacion autorizacion)
 {
     public void Ejecutar(Usuario usuario, int usuarioId)
     {
@@ -17,7 +17,7 @@ public class UsuarioModificacionUseCase(IRepositorioUsuario repo, UsuarioValidad
 
         // si el usuario se quiere modificar a si mismo no se requieren permisos
         if (usuarioActual.Id != usuario.Id &&
-            !auth.EstaAutorizado(usuarioId, Permiso.UsuarioModificacion))
+            !autorizacion.EstaAutorizado(usuarioId, Permiso.GestionUsuarios))
         {
             throw new FalloAutorizacionException("error Autorizacion");
         }

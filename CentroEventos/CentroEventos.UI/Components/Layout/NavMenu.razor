@@ -214,11 +214,7 @@
                     </NavLink>
                 </div>
 
-                @if (
-                   Sesion.UsuarioActual.Permisos.Contains(Permiso.UsuarioAlta) ||
-                   Sesion.UsuarioActual.Permisos.Contains(Permiso.UsuarioBaja) ||
-                   Sesion.UsuarioActual.Permisos.Contains(Permiso.UsuarioModificacion)
-               )
+                @if (Sesion.UsuarioActual.Permisos.Contains(Permiso.GestionUsuarios))
                 {
                     <div class="nav-item-custom">
                         <NavLink class="nav-link-custom" href="control-acceso">
@@ -226,12 +222,8 @@
                             <span>Control de Acceso</span>
                         </NavLink>
                     </div>
-                }
 
                 <hr class="nav-divider" />
-
-                @if (Sesion.UsuarioActual.Permisos.Contains(Permiso.UsuarioAlta))
-                {
                     <div class="nav-item-custom">
                         <NavLink class="nav-link-custom" href="crear-usuario">
                             <i class="bi bi-person-plus-fill nav-icon"></i>

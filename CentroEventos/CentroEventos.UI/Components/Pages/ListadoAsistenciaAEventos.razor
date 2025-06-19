@@ -5,7 +5,7 @@
 @using CentroEventos.Aplicacion.CasosDeUso
 @inject NavigationManager NavigationManager
 @inject Sesion Sesion
-@inject ListarEventosConCupoDisponibleUseCase ListarEventosUseCase
+@inject EventoDeportivoListarUseCase EventoDeportivoListarUseCase
 @inject ListarAsistenciaAEventoUseCase ListarAsistenciaUseCase
 
 <h3>Asistencia a Eventos Finalizados</h3>
@@ -58,14 +58,8 @@
 
     protected override void OnInitialized()
     {
-        // Reutilizás el caso de uso existente
-        var todos = ListarEventosUseCase.Ejecutar();
-        eventosPasados = todos
-            .Where(e => e.FechaHoraInicio <= DateTime.Now)
-            .OrderByDescending(e => e.FechaHoraInicio)
-            .ToList();
+        eventosPasados = EventoDeportivoListarUseCase.Ejecutar(true);
     }
-
     private void EventoSeleccionadoChanged(ChangeEventArgs e)
     {
         error = null;
