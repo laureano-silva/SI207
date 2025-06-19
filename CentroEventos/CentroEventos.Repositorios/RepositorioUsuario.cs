@@ -94,7 +94,7 @@ public class RepositorioUsuario() : IRepositorioUsuario
         usuarioExistente.Email = usuario.Email;
         if (!string.IsNullOrEmpty(usuario.Password))
         {
-            usuarioExistente.EstablecerContraseña(usuario.Password);    
+            usuarioExistente.Password = usuario.Password;    
         }
         usuarioExistente.Permisos = [.. usuario.Permisos];
         context.SaveChanges();
